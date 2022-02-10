@@ -10,11 +10,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: _title,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: const LaunchScreen(),
+        body: LaunchScreen(),
       ),
     );
   }
