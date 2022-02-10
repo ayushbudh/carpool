@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'launch_screen.dart';
+import 'base_screen.dart';
 
 void main() => runApp(const MyApp());
 
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
       title: _title,
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: LaunchScreen(),
+        body: BaseScreen(),
       ),
     );
   }
