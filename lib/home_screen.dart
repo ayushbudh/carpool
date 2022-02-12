@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -28,10 +30,8 @@ class HomeScreen extends StatelessWidget {
               ),
               Column(
                 children: [
-                  Text(
-                    'Good Day, Jack!',
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
+                  buildText(
+                      'Good Day, Jack!', Theme.of(context).textTheme.headline5),
                 ],
               ),
             ],
@@ -45,8 +45,8 @@ class HomeScreen extends StatelessWidget {
           padding: const EdgeInsets.only(left: 35, right: 35, bottom: 35),
           child: Row(
             children: [
-              Text('Recent Activity',
-                  style: Theme.of(context).textTheme.headline6),
+              buildText(
+                  'Recent Activity', Theme.of(context).textTheme.headline6),
             ],
           ),
         ),
@@ -65,13 +65,11 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        'Rebeka ratry',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
+                      buildText('Rebeka ratry',
+                          Theme.of(context).textTheme.headline6),
                       Padding(padding: const EdgeInsets.all(3)),
-                      Text('22 Jan 2020',
-                          style: Theme.of(context).textTheme.bodyText2),
+                      buildText(
+                          '22 Jan 2020', Theme.of(context).textTheme.bodyText2),
                     ],
                   ),
                 ],
@@ -79,9 +77,9 @@ class HomeScreen extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text('+\$1,190.00'),
+                  buildText('+\$1,190.00', TextStyle()),
                   Padding(padding: const EdgeInsets.all(3)),
-                  Text('03:25am'),
+                  buildText('03:25am', TextStyle()),
                 ],
               )
             ],
@@ -102,13 +100,11 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        'Rebeka ratry',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
+                      buildText('Rebeka ratry',
+                          Theme.of(context).textTheme.headline6),
                       Padding(padding: const EdgeInsets.all(3)),
-                      Text('22 Jan 2020',
-                          style: Theme.of(context).textTheme.bodyText2),
+                      buildText(
+                          '22 Jan 2020', Theme.of(context).textTheme.bodyText2),
                     ],
                   ),
                 ],
@@ -116,9 +112,9 @@ class HomeScreen extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text('+\$1,190.00'),
+                  buildText('+\$1,190.00', TextStyle()),
                   Padding(padding: const EdgeInsets.all(3)),
-                  Text('03:25am'),
+                  buildText('03:25am', TextStyle()),
                 ],
               )
             ],
@@ -139,13 +135,11 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        'Rebeka ratry',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
+                      buildText('Rebeka ratry',
+                          Theme.of(context).textTheme.headline6),
                       Padding(padding: const EdgeInsets.all(3)),
-                      Text('22 Jan 2020',
-                          style: Theme.of(context).textTheme.bodyText2),
+                      buildText(
+                          '22 Jan 2020', Theme.of(context).textTheme.bodyText2),
                     ],
                   ),
                 ],
@@ -153,9 +147,9 @@ class HomeScreen extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text('+\$1,190.00'),
+                  buildText('+\$1,190.00', TextStyle()),
                   Padding(padding: const EdgeInsets.all(3)),
-                  Text('03:25am'),
+                  buildText('03:25am', TextStyle()),
                 ],
               )
             ],
@@ -167,11 +161,12 @@ class HomeScreen extends StatelessWidget {
             ElevatedButton(
               style: raisedButtonStyle,
               onPressed: () {},
-              child: Text(
-                'Drive',
-                style: TextStyle(
-                  fontSize: 22,
-                ),
+              child: Row(
+                children: [
+                  buildText('Drive', TextStyle(fontSize: 22)),
+                  Padding(padding: const EdgeInsets.all(2)),
+                  Icon(Icons.double_arrow)
+                ],
               ),
             )
           ],
@@ -179,9 +174,25 @@ class HomeScreen extends StatelessWidget {
       ],
     );
   }
+
+  Widget buildText(text, style) {
+    return Container(
+      child: FittedBox(
+        child: Text(text, style: style),
+      ),
+    );
+  }
 }
 
 class AccountCard extends StatelessWidget {
+  Widget buildText(text, style) {
+    return Container(
+      child: FittedBox(
+        child: Text(text, style: style),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -194,11 +205,11 @@ class AccountCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                buildText(
                   'Ebl titanium account',
-                  style: TextStyle(color: Colors.white),
+                  TextStyle(color: Colors.white),
                 ),
-                Text('Jack Sim', style: TextStyle(color: Colors.white)),
+                buildText('Jack Sim', TextStyle(color: Colors.white)),
               ],
             ),
             Row(
@@ -206,13 +217,13 @@ class AccountCard extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    Text(
+                    buildText(
                       '\$6,190.00',
-                      style: TextStyle(fontSize: 40, color: Colors.white),
+                      TextStyle(fontSize: 40, color: Colors.white),
                     ),
-                    Text(
+                    buildText(
                       'Total Balance',
-                      style: TextStyle(color: Colors.white),
+                      TextStyle(color: Colors.white),
                     ),
                   ],
                 )
@@ -221,13 +232,13 @@ class AccountCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                buildText(
                   'Added card:05',
-                  style: TextStyle(color: Colors.white),
+                  TextStyle(color: Colors.white),
                 ),
-                Text(
+                buildText(
                   'Ac. no. 2234521',
-                  style: TextStyle(color: Colors.white),
+                  TextStyle(color: Colors.white),
                 ),
               ],
             ),
@@ -235,7 +246,7 @@ class AccountCard extends StatelessWidget {
         ),
       ),
       decoration: BoxDecoration(
-          color: Colors.blue,
+          color: const Color(0xff199EFF),
           borderRadius: BorderRadius.all(Radius.circular(10))),
     );
   }
