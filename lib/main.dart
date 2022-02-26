@@ -1,3 +1,4 @@
+import 'package:carpool_app/auth_screen.dart';
 import 'package:flutter/material.dart';
 import 'launch_screen_options.dart';
 import 'launch_screen.dart';
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/launchscreenoptions': (context) => LaunchScreenOptions(),
         '/': (context) => LaunchScreen(),
+        '/auth': (context) => AuthScreen()
       },
     );
   }
