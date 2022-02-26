@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'launch_screen_options.dart';
+import 'launch_screen.dart';
 
 void main() => runApp(const MyApp());
 
@@ -12,6 +13,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/launchscreenoptions': (context) => LaunchScreenOptions(),
+        '/': (context) => LaunchScreen(),
       },
     );
   }

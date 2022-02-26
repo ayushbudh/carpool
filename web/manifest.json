@@ -1,6 +1,6 @@
 {
-    "name": "carpool",
-    "short_name": "carpool",
+    "name": "carpool_app",
+    "short_name": "carpool_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
