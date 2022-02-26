@@ -29,7 +29,6 @@ class _LaunchScreenState extends State<LaunchScreen> {
             /// [PageView.scrollDirection] defaults to [Axis.horizontal].
             /// Use [Axis.vertical] to scroll vertically.
             controller: controller,
-
             children: <Widget>[
               Container(
                 child: Stack(children: [
@@ -105,7 +104,9 @@ class _LaunchScreenState extends State<LaunchScreen> {
                   padding: const EdgeInsets.all(10),
                   child: ElevatedButton(
                     style: raisedButtonStyle,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/launchscreenoptions');
+                    },
                     child: const Text('Let\'s Go'),
                   ))
             ],
