@@ -1,4 +1,6 @@
+import 'dart:collection';
 import 'package:flutter/material.dart';
+import 'package:carpool_app/auth.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen();
@@ -13,6 +15,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _lastName = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final AuthService _auth = AuthService();
 
   bool _success = true;
   String _failureReason = '';
@@ -148,7 +151,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   onPressed: () async {
                     // Validate returns true if the form is valid, or false otherwise.
-                    if (_formKey.currentState!.validate()) {}
+                    if (_formKey.currentState!.validate()) {
+                      HashSet<Object> response = await _auth.signUp(
+                        context,
+                        _firstName.value.text,
+                        _lastName.value.text,
+                        _emailController.value.text,
+                        _passwordController.value.text,
+                      );
+
+                      if (response.elementAt(0) == false) {
+                        setState(() {
+                          _success = false;
+                          _failureReason = response.elementAt(1).toString();
+                        });
+                      }
+                    }
                   },
                   // UPDATED
                   child: const Text('Sign up'),
@@ -187,10 +205,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Container(
                   margin: const EdgeInsets.only(bottom: 10),
                   child: Text(
-                    'Already have an account ? Swipe right',
-                    style: TextStyle(color: Colors.white, fontSize: 17),
+                    'Already have an account ?',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 17,
+                    ),
                   ),
-                )
+                ),
+                Container(
+                    width: 150,
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.all(Radius.circular(50.0))),
+                    child: Center(
+                      child: Text(
+                        "Swipe right >",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                        ),
+                      ),
+                    )),
               ],
             ),
           ),

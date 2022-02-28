@@ -1,4 +1,8 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
+
+import 'auth.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen();
@@ -14,6 +18,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   bool _success = true;
   String _failureReason = '';
+  final AuthService _auth = AuthService();
 
   void _loginSignupNavigator(BuildContext context, String url) {
     Navigator.of(context).pushReplacementNamed(url);
@@ -108,7 +113,19 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   onPressed: () async {
                     // Validate returns true if the form is valid, or false otherwise.
-                    if (_formKey.currentState!.validate()) {}
+                    if (_formKey.currentState!.validate()) {
+                      HashSet<Object> response = await _auth.sigInWithEmail(
+                          context,
+                          _emailController.value.text,
+                          _passwordController.value.text);
+
+                      if (response.elementAt(0) == false) {
+                        setState(() {
+                          _success = false;
+                          _failureReason = response.elementAt(1).toString();
+                        });
+                      }
+                    }
                   },
                   // UPDATED
                   child: const Text('Sign In'),
@@ -147,10 +164,24 @@ class _SignInScreenState extends State<SignInScreen> {
                 Container(
                   margin: const EdgeInsets.only(bottom: 10),
                   child: Text(
-                    'Don\'t have an account ? Swipe left',
+                    'Don\'t have an account ?',
                     style: TextStyle(color: Colors.white, fontSize: 17),
                   ),
                 ),
+                Container(
+                    width: 150,
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.all(Radius.circular(50.0))),
+                    child: Center(
+                      child: Text(
+                        "< Swipe left",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17,
+                        ),
+                      ),
+                    )),
               ],
             ),
           ),
