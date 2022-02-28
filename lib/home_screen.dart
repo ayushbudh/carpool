@@ -160,7 +160,9 @@ class HomeScreen extends StatelessWidget {
           children: [
             ElevatedButton(
               style: raisedButtonStyle,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/drive');
+              },
               child: Row(
                 children: [
                   buildText('Drive', TextStyle(fontSize: 22)),
