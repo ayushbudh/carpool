@@ -1,5 +1,5 @@
+import 'package:carpool_app/drive_screen.dart';
 import 'package:flutter/material.dart';
-import 'map_screen.dart';
 import 'home_screen.dart';
 import 'profile_screen.dart';
 
@@ -15,7 +15,7 @@ class _BaseScreenState extends State<BaseScreen> {
 
   static List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    MapScreen(),
+    DriveScreen(),
     ProfileScreen(),
   ];
 
@@ -28,7 +28,7 @@ class _BaseScreenState extends State<BaseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: SizedBox(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -40,8 +40,8 @@ class _BaseScreenState extends State<BaseScreen> {
               label: 'Home',
               backgroundColor: Colors.blue),
           BottomNavigationBarItem(
-            icon: Icon(Icons.directions_car),
-            label: 'Map',
+            icon: Icon(Icons.search),
+            label: 'Search',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_rounded),
