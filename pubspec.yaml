@@ -21,6 +21,8 @@ dependencies:
   google_maps_flutter_web: ^0.3.2+1
   flutter_polyline_points: ^1.0.0
   firebase_core: ^1.13.1
+  geolocator: ^8.2.0
+  shared_preferences: ^2.0.13
   
 dev_dependencies:
   flutter_test:

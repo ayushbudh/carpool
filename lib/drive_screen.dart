@@ -1,19 +1,20 @@
 import 'package:carpool_app/map_screen.dart';
+import 'package:carpool_app/search_autocomplete_screen.dart';
 import 'package:flutter/material.dart';
 import 'location_services.dart';
 import 'map_screen.dart' as _MapScreenState;
 
 class DriveScreen extends StatefulWidget {
-  const DriveScreen();
+  DriveScreen();
 
   @override
-  _DriveScreenState createState() => _DriveScreenState();
+  DriveScreenState createState() => DriveScreenState();
 }
 
-class _DriveScreenState extends State<DriveScreen> {
+class DriveScreenState extends State<DriveScreen> {
   final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
     onPrimary: Colors.white,
-    primary: const Color(0xff199EFF),
+    primary: Color.fromARGB(255, 101, 121, 134),
     minimumSize: const Size(160, 50),
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
     shape: const RoundedRectangleBorder(
@@ -59,6 +60,11 @@ class _DriveScreenState extends State<DriveScreen> {
                     height: 60,
                     child: TextField(
                       controller: _pickup,
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                SearchAutoCompleteScreen(_pickup)));
+                      },
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Pick up',
@@ -84,6 +90,11 @@ class _DriveScreenState extends State<DriveScreen> {
                     height: 60,
                     child: TextField(
                       controller: _destination,
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                SearchAutoCompleteScreen(_destination)));
+                      },
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Destination',
