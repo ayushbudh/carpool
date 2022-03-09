@@ -21,10 +21,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _success = true;
   String _failureReason = '';
 
-  void _loginSignupNavigator(BuildContext context, String url) {
-    Navigator.of(context).pushReplacementNamed(url);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

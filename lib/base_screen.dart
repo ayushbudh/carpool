@@ -13,7 +13,7 @@ class BaseScreen extends StatefulWidget {
 class _BaseScreenState extends State<BaseScreen> {
   int _selectedIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(),
+    // HomeScreen(),
     DriveScreen(),
     ProfileScreen(),
   ];

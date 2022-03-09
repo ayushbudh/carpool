@@ -19,10 +19,6 @@ class _SignInScreenState extends State<SignInScreen> {
   String _failureReason = '';
   final AuthService _auth = AuthService();
 
-  void _loginSignupNavigator(BuildContext context, String url) {
-    Navigator.of(context).pushReplacementNamed(url);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

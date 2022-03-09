@@ -58,7 +58,8 @@ class _LaunchScreenState extends State<LaunchScreen> {
                       heightFactor: 30,
                     ),
                     Center(
-                        child: Image.asset('carouselscreen1.png', width: 500))
+                        child: Image.asset('assets/carouselscreen1.png',
+                            width: 500))
                   ]),
                   color: const Color(0xff199EFF),
                 ),
@@ -85,7 +86,8 @@ class _LaunchScreenState extends State<LaunchScreen> {
                       heightFactor: 24,
                     ),
                     Center(
-                      child: Image.asset('carouselscreen2.png', width: 220),
+                      child:
+                          Image.asset('assets/carouselscreen2.png', width: 220),
                     )
                   ]),
                   color: const Color(0xffF7F7F7),
