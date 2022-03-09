@@ -8,13 +8,14 @@
 .buildlog/
 .history
 .svn/
-
+.env
 # IntelliJ related
 *.iml
 *.ipr
 *.iws
 .idea/
-.env
+/lib/firebase_options.dart
+
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
@@ -33,6 +34,7 @@
 
 # Web related
 lib/generated_plugin_registrant.dart
+lib/firebase_options.dart
 
 # Symbolication related
 app.*.symbols

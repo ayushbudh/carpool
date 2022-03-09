@@ -26,17 +26,23 @@
   <meta name="apple-mobile-web-app-title" content="carpool_app">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
+  <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY"></script>
+
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="google_maps_in_flutter">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">  
 
   <title>carpool_app</title>
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <!-- This script installs service_worker.js to provide PWA functionality to
-       application. For more information, see:
-       https://developers.google.com/web/fundamentals/primers/service-workers -->
   <script>
+    
     var serviceWorkerVersion = null;
     var scriptLoaded = false;
     function loadMainDartJs() {

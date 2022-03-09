@@ -35,7 +35,7 @@ class LaunchScreenOptions extends StatelessWidget {
                 child: ElevatedButton(
                   style: optionButtonStyle,
                   onPressed: () {
-                    Navigator.pushNamed(context, '/signup');
+                    Navigator.pushNamed(context, '/auth');
                   },
                   child: const Text('Driver'),
                 )),
@@ -44,7 +44,7 @@ class LaunchScreenOptions extends StatelessWidget {
               child: ElevatedButton(
                 style: optionButtonStyle,
                 onPressed: () {
-                  Navigator.pushNamed(context, '/signup');
+                  Navigator.pushNamed(context, '/auth');
                 },
                 child: const Text('Rider'),
               ),
