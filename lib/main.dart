@@ -1,6 +1,8 @@
 import 'package:carpool_app/auth.dart';
 import 'package:carpool_app/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:carpool_app/base_screen.dart';
+import 'package:carpool_app/drive_screen.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'launch_screen_options.dart';
@@ -24,6 +26,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
+        '/drive': (context) => DriveScreen(),
         '/launchscreenoptions': (context) => LaunchScreenOptions(),
         '/': (context) => StreamProvider.value(
               initialData: null,
