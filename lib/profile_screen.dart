@@ -1,7 +1,9 @@
+import 'package:carpool_app/auth.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  ProfileScreen({Key? key}) : super(key: key);
+  final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +98,14 @@ class ProfileScreen extends StatelessWidget {
             children: [
               ElevatedButton(
                 style: raisedButtonStyle,
-                onPressed: () {},
+                onPressed: () async {
+                  var res = await _auth.signOut();
+                  if (res == 'SUCCESS') {
+                    Navigator.pushReplacementNamed(context, '/');
+                  } else {
+                    print("Something went wrong. Please try again!");
+                  }
+                },
                 child: Row(
                   children: [
                     Text('Log out', style: TextStyle(fontSize: 17)),

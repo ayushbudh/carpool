@@ -1,3 +1,4 @@
+import 'package:carpool_app/base_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:carpool_app/home_screen.dart';
@@ -123,7 +124,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
         ),
       );
     } else {
-      return HomeScreen();
+      return BaseScreen();
     }
   }
 }

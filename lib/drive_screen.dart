@@ -14,7 +14,7 @@ class DriveScreen extends StatefulWidget {
 class DriveScreenState extends State<DriveScreen> {
   final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
     onPrimary: Colors.white,
-    primary: Color.fromARGB(255, 101, 121, 134),
+    primary: const Color(0xff199EFF),
     minimumSize: const Size(160, 50),
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
     shape: const RoundedRectangleBorder(

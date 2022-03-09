@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 class LocationService {
-  final String key = 'API_KEY';
+  final String key = 'API-KEY';
 
   // currently not being used, this function is just for reference
   Future<Map<String, dynamic>> getPlaceID(String input) async {
@@ -29,13 +29,15 @@ class LocationService {
       'end_location': json['routes'][0]['legs'][0]['end_location'],
       'polyline': json['routes'][0]['overview_polyline']['points'],
       'distanceInMiles': json['routes'][0]['legs'][0]['distance']['text'],
-      'durationToReachDestination': json['routes'][0]['legs'][0]['duration']['text'],
+      'durationToReachDestination': json['routes'][0]['legs'][0]['duration']
+          ['text'],
       'polyline_decoded': PolylinePoints()
           .decodePolyline(json['routes'][0]['overview_polyline']['points']),
     };
 
     return results;
   }
+
   Future<Map> getSearchResults(String input) async {
     final String url =
         'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${key}';
@@ -49,6 +51,4 @@ class LocationService {
 
     return results;
   }
-
 }
-
