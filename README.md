@@ -1,16 +1,11 @@
-# carpool_app
+# Carpool
 
-A new Flutter project.
+An app to help reduce carbon footprint in the environment by sharing car ride with people going on a same route.
 
-## Getting Started
+## Project Status Board
 
-This project is a starting point for a Flutter application.
+https://trello.com/b/o7j75SKg/carpool
 
-A few resources to get you started if this is your first Flutter project:
+## App Prototype
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+https://www.figma.com/file/sYpzzz2ShWBI7K8lAojgAe/Car-Pooling?node-id=0%3A1
