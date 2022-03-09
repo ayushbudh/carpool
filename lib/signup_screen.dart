@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:carpool_app/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen();
@@ -152,7 +153,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   onPressed: () async {
                     // Validate returns true if the form is valid, or false otherwise.
                     if (_formKey.currentState!.validate()) {
-                      HashSet<Object> response = await _auth.signUp(
+                      String response = await _auth.signUp(
                         context,
                         _firstName.value.text,
                         _lastName.value.text,
@@ -160,10 +161,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         _passwordController.value.text,
                       );
 
-                      if (response.elementAt(0) == false) {
+                      if (response != "None") {
                         setState(() {
                           _success = false;
-                          _failureReason = response.elementAt(1).toString();
+                          _failureReason = response;
                         });
                       }
                     }
@@ -193,8 +194,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }),
                   ),
                   onPressed: () async {
-                    // Validate returns true if the form is valid, or false otherwise.
-                    if (_formKey.currentState!.validate()) {}
+                    UserCredential? user;
+                    try {
+                      UserCredential? user = await _auth.signInWithGoogle();
+                      if (user != null) {
+                        Navigator.of(context).pushReplacementNamed("/home");
+                      }
+                    } catch (e) {
+                      print(e);
+                    }
                   },
                   // UPDATED
                   child: const Text('Google Signup'),

@@ -11,6 +11,9 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () async {
+                if (await _auth.googleSignIn.isSignedIn()) {
+                  _auth.signOutWithGoogle();
+                }
                 var res = await _auth.signOut();
                 if (res == 'SUCCESS') {
                   Navigator.pushReplacementNamed(context, '/');

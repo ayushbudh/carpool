@@ -1,7 +1,6 @@
 import 'dart:collection';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'auth.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -114,15 +113,15 @@ class _SignInScreenState extends State<SignInScreen> {
                   onPressed: () async {
                     // Validate returns true if the form is valid, or false otherwise.
                     if (_formKey.currentState!.validate()) {
-                      HashSet<Object> response = await _auth.sigInWithEmail(
+                      String response = await _auth.sigInWithEmail(
                           context,
                           _emailController.value.text,
                           _passwordController.value.text);
 
-                      if (response.elementAt(0) == false) {
+                      if (response != "None") {
                         setState(() {
                           _success = false;
-                          _failureReason = response.elementAt(1).toString();
+                          _failureReason = response;
                         });
                       }
                     }
@@ -152,8 +151,15 @@ class _SignInScreenState extends State<SignInScreen> {
                     }),
                   ),
                   onPressed: () async {
-                    // Validate returns true if the form is valid, or false otherwise.
-                    if (_formKey.currentState!.validate()) {}
+                    UserCredential? user;
+                    try {
+                      UserCredential? user = await _auth.signInWithGoogle();
+                      if (user != null) {
+                        Navigator.of(context).pushReplacementNamed("/home");
+                      }
+                    } catch (e) {
+                      print(e);
+                    }
                   },
                   // UPDATED
                   child: const Text('Google Signin'),
@@ -170,10 +176,10 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
                 Container(
                     width: 150,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.all(Radius.circular(50.0))),
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         "< Swipe left",
                         style: TextStyle(

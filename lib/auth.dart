@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:async';
 
 class AuthService {
@@ -14,8 +15,7 @@ class AuthService {
   }
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  // final googleSignIn = GoogleSignIn();
-  bool _success = false;
+  final googleSignIn = GoogleSignIn();
   String _failureReason = "None";
 
   Stream<User?> get user {
@@ -44,6 +44,40 @@ class AuthService {
           .whenComplete(() => print("Data stored successfully"));
     }
     return;
+  }
+
+  Future<UserCredential> signInWithGoogle() async {
+    if (kIsWeb) {
+      print(_auth.app.hashCode);
+      // Create a new provider
+      GoogleAuthProvider googleProvider = GoogleAuthProvider();
+      googleProvider
+          .addScope('https://www.googleapis.com/auth/contacts.readonly');
+      googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
+
+      // Once signed in, return the UserCredential
+      return await _auth.signInWithPopup(googleProvider);
+    } else {
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      return await _auth.signInWithCredential(credential);
+    }
+  }
+
+  void signOutWithGoogle() async {
+    await googleSignIn.disconnect();
   }
 
   Future signUp(BuildContext context, String firstName, String lastName,
@@ -75,27 +109,22 @@ class AuthService {
           .whenComplete(() => print("Data stored successfully"));
 
       Navigator.of(context).pushReplacementNamed("/home");
-      _success = true;
       _failureReason = "None";
-      return {_success, _failureReason};
+      return _failureReason;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        _success = false;
         _failureReason = 'The password provided is too weak.';
-        return {_success, _failureReason};
+        return _failureReason;
       } else if (e.code == 'email-already-in-use') {
-        _success = false;
         _failureReason = 'The account already exists for that email.';
-        return {_success, _failureReason};
+        return _failureReason;
       } else {
-        _success = false;
         _failureReason = e.message.toString();
-        return {_success, _failureReason};
+        return _failureReason;
       }
     } catch (e) {
-      _success = false;
       _failureReason = e.toString();
-      return {_success, _failureReason};
+      return _failureReason;
     }
   }
 
@@ -107,25 +136,21 @@ class AuthService {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       Navigator.of(context).pushReplacementNamed("/home");
-      return {_success, _failureReason};
+      _failureReason = "None";
+      return _failureReason;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        _success = false;
-        _failureReason = 'No user found for that email.';
-        return {_success, _failureReason};
+        return _failureReason;
       } else if (e.code == 'wrong-password') {
-        _success = false;
         _failureReason = 'Wrong password provided for that user.';
-        return {_success, _failureReason};
+        return _failureReason;
       } else {
-        _success = false;
         _failureReason = e.message.toString();
-        return {_success, _failureReason};
+        return _failureReason;
       }
     } catch (e) {
-      _success = false;
       _failureReason = e.toString();
-      return {_success, _failureReason};
+      return _failureReason;
     }
   }
 
