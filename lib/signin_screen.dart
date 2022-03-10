@@ -110,10 +110,12 @@ class _SignInScreenState extends State<SignInScreen> {
                     // Validate returns true if the form is valid, or false otherwise.
                     if (_formKey.currentState!.validate()) {
                       String response = await _auth.sigInWithEmail(
-                          context,
-                          _emailController.value.text,
-                          _passwordController.value.text);
+                        context,
+                        _emailController.value.text,
+                        _passwordController.value.text,
+                      );
 
+                      print(response);
                       if (response != "None") {
                         setState(() {
                           _success = false;
@@ -151,10 +153,15 @@ class _SignInScreenState extends State<SignInScreen> {
                     try {
                       UserCredential? user = await _auth.signInWithGoogle();
                       if (user != null) {
+                        _auth.storeGoogleUserInCollection(user);
                         Navigator.of(context).pushReplacementNamed("/home");
                       }
                     } catch (e) {
-                      print(e);
+                      setState(() {
+                        _success = false;
+                        _failureReason =
+                            "Google signin failed. Please try again later!";
+                      });
                     }
                   },
                   // UPDATED

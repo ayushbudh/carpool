@@ -4,7 +4,8 @@ import 'package:carpool_app/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen();
+  final String role;
+  const SignUpScreen(this.role);
 
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
@@ -150,12 +151,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     // Validate returns true if the form is valid, or false otherwise.
                     if (_formKey.currentState!.validate()) {
                       String response = await _auth.signUp(
-                        context,
-                        _firstName.value.text,
-                        _lastName.value.text,
-                        _emailController.value.text,
-                        _passwordController.value.text,
-                      );
+                          context,
+                          _firstName.value.text,
+                          _lastName.value.text,
+                          _emailController.value.text,
+                          _passwordController.value.text,
+                          widget.role);
 
                       if (response != "None") {
                         setState(() {
@@ -194,10 +195,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     try {
                       UserCredential? user = await _auth.signInWithGoogle();
                       if (user != null) {
+                        _auth.storeGoogleUserInCollection(user);
                         Navigator.of(context).pushReplacementNamed("/home");
                       }
                     } catch (e) {
-                      print(e);
+                      setState(() {
+                        _success = false;
+                        _failureReason =
+                            "Google signup failed. Please try again later!";
+                      });
                     }
                   },
                   // UPDATED

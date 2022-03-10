@@ -1,9 +1,21 @@
 import 'package:carpool_app/auth.dart';
 import 'package:flutter/material.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key}) : super(key: key);
+
+  ProfileScreenState createState() => ProfileScreenState();
+}
+
+class ProfileScreenState extends State<ProfileScreen> {
   final AuthService _auth = AuthService();
+  late TextEditingController _emailController;
+
+  @override
+  void initState() {
+    _emailController = TextEditingController(text: _auth.getEmail());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,37 +55,22 @@ class ProfileScreen extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 200),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(children: [
-                  Text(
-                    'Email: ',
-                    style: TextStyle(fontSize: 20, color: Colors.white),
-                  ),
-                ]),
-                Column(
-                  children: [
-                    Container(
-                      height: 35,
-                      width: 190,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Text(
-                          "hello@hello.com",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(13))),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
+              padding: const EdgeInsets.only(bottom: 100, right: 20, left: 20),
+              child: Container(
+                child: TextField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                        labelText: 'Email',
+                        border: OutlineInputBorder(),
+                        fillColor: Colors.white,
+                        labelStyle: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            backgroundColor: Color(0xff199EFF)),
+                        filled: true,
+                        enabled: false)),
+              )),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -101,7 +98,8 @@ class ProfileScreen extends StatelessWidget {
                 onPressed: () async {
                   var res = await _auth.signOut();
                   if (res == 'SUCCESS') {
-                    Navigator.pushReplacementNamed(context, '/');
+                    Navigator.of(context)
+                        .pushReplacementNamed('/launchscreenoptions');
                   } else {
                     print("Something went wrong. Please try again!");
                   }

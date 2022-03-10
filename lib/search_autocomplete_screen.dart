@@ -28,7 +28,7 @@ class _SearchAutoCompleteScreenState extends State<SearchAutoCompleteScreen> {
   Widget build(BuildContext build) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xff199EFF),
         // The search area here
         title: Container(
           width: double.infinity,
@@ -42,6 +42,7 @@ class _SearchAutoCompleteScreenState extends State<SearchAutoCompleteScreen> {
                 setSearchResults(value);
               },
               decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search),
                   suffixIcon: IconButton(
                     icon: Icon(Icons.clear),
                     onPressed: () {

@@ -16,6 +16,8 @@ class AuthService {
   }
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestoredb = FirebaseFirestore.instance;
+
   final googleSignIn = GoogleSignIn();
   String _failureReason = "None";
 
@@ -25,31 +27,43 @@ class AuthService {
 
   void storeGoogleUserInCollection(UserCredential user) {
     String timestamp = DateTime.now().toString();
+    var uuid = Uuid();
+    var v1 = uuid.v1();
 
     if (user.additionalUserInfo?.isNewUser == true) {
       DocumentReference documentReference =
-          FirebaseFirestore.instance.collection("users").doc(timestamp);
+          _firestoredb.collection("users").doc(user.user?.uid);
 
-      var uuid = Uuid();
-      var v1 = uuid.v1();
-      Map<String, String> todoList = {
+      Map<String, String> userObject = {
         "firstName": user.additionalUserInfo?.profile?["given_name"],
         "lastName": user.additionalUserInfo?.profile?["family_name"],
-        "role": "customer",
+        "role": "?",
         "timestamp": timestamp,
-        "userId": v1,
+        "userId": user.user?.uid ?? v1,
       };
 
       documentReference
-          .set(todoList)
+          .set(userObject)
           .whenComplete(() => print("Data stored successfully"));
     }
     return;
   }
 
+  // have to work on this function to get role of the current logged in user
+  Future<Map> getFullName() async {
+    var data = await _firestoredb
+        .collection('drivers')
+        .doc(_auth.currentUser?.uid)
+        .get();
+
+    return {
+      "firstName": data.data()!["firstName"],
+      "lastName": data.data()!["lastName"]
+    };
+  }
+
   Future<UserCredential> signInWithGoogle() async {
     if (kIsWeb) {
-      print(_auth.app.hashCode);
       // Create a new provider
       GoogleAuthProvider googleProvider = GoogleAuthProvider();
       googleProvider
@@ -82,7 +96,7 @@ class AuthService {
   }
 
   Future signUp(BuildContext context, String firstName, String lastName,
-      String email, String password) async {
+      String email, String password, String role) async {
     print("Sign Up!");
 
     try {
@@ -90,17 +104,29 @@ class AuthService {
           .createUserWithEmailAndPassword(email: email, password: password);
 
       String timestamp = DateTime.now().toString();
-
-      DocumentReference documentReference =
-          FirebaseFirestore.instance.collection("users").doc(timestamp);
-
+      DocumentReference documentReference;
       var uuid = Uuid();
       var v1 = uuid.v1();
+
+      if (role == "driver") {
+        documentReference = _firestoredb
+            .collection("drivers")
+            .doc(userCredential.user?.uid ?? v1);
+      } else if (role == "rider") {
+        documentReference = _firestoredb
+            .collection("riders")
+            .doc(userCredential.user?.uid ?? v1);
+      } else {
+        // this case can handle situations where role is something else like "None"
+        documentReference = _firestoredb
+            .collection("users")
+            .doc(userCredential.user?.uid ?? v1);
+      }
 
       Map<String, String> todoList = {
         "firstName": firstName,
         "lastName": lastName,
-        "role": "driver",
+        "role": role,
         "timestamp": timestamp,
         "userId": userCredential.user?.uid ?? v1,
       };
@@ -141,6 +167,7 @@ class AuthService {
       return _failureReason;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
+        _failureReason = "User not found";
         return _failureReason;
       } else if (e.code == 'wrong-password') {
         _failureReason = 'Wrong password provided for that user.';
@@ -155,12 +182,22 @@ class AuthService {
     }
   }
 
-  Future<String> signOut() async {
-    try {
-      await _auth.signOut();
-      return "SUCCESS";
-    } catch (e) {
-      return "FAILED";
+  String getEmail() {
+    if (_auth.currentUser != null) {
+      return _auth.currentUser!.email ?? "Trouble getting email.";
     }
+    return "Email found not found.";
+  }
+
+  Future<String> signOut() async {
+    if (_auth.currentUser != null) {
+      try {
+        await _auth.signOut();
+        return "SUCCESS";
+      } catch (e) {
+        return "FAILED";
+      }
+    }
+    return "FAILED";
   }
 }

@@ -1,3 +1,4 @@
+import 'package:carpool_app/auth_screen.dart';
 import 'package:flutter/material.dart';
 
 class LaunchScreenOptions extends StatelessWidget {
@@ -20,9 +21,9 @@ class LaunchScreenOptions extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 150, bottom: 10),
-              child: const Text(
+            const Padding(
+              padding: EdgeInsets.only(top: 150, bottom: 10),
+              child: Text(
                 'Select an option',
                 style: TextStyle(
                     fontSize: 40,
@@ -35,7 +36,8 @@ class LaunchScreenOptions extends StatelessWidget {
                 child: ElevatedButton(
                   style: optionButtonStyle,
                   onPressed: () {
-                    Navigator.pushNamed(context, '/auth');
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => AuthScreen("driver")));
                   },
                   child: const Text('Driver'),
                 )),
@@ -44,7 +46,8 @@ class LaunchScreenOptions extends StatelessWidget {
               child: ElevatedButton(
                 style: optionButtonStyle,
                 onPressed: () {
-                  Navigator.pushNamed(context, '/auth');
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => AuthScreen("rider")));
                 },
                 child: const Text('Rider'),
               ),

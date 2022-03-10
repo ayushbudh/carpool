@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'auth.dart';
+
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
+  final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -18,26 +21,81 @@ class HomeScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(Icons.account_circle, size: 50),
+        FutureBuilder<Map>(
+          future: _auth.getFullName(),
+          builder: (BuildContext context, AsyncSnapshot<Map> snapshot) {
+            List<Widget> children;
+            if (snapshot.hasData) {
+              children = <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 50.0, left: 20.0, bottom: 20.0),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(Icons.account_circle, size: 50),
+                      ),
+                      Column(
+                        children: [
+                          buildText('Good Day, ${snapshot.data!["firstName"]}',
+                              Theme.of(context).textTheme.headline5),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 35, right: 35, bottom: 35),
+                  child: AccountCard(snapshot.data!["firstName"] +
+                      " " +
+                      snapshot.data!["lastName"]),
+                ),
+              ];
+            } else if (snapshot.hasError) {
+              children = <Widget>[
+                const Icon(
+                  Icons.error_outline,
+                  color: Colors.red,
+                  size: 40,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 15),
+                  child: Text(
+                      'We are having some problem getting your details. Please try again later.',
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                )
+              ];
+            } else {
+              children = const <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(top: 90.0),
+                  child: SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: CircularProgressIndicator(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 16, bottom: 40),
+                  child: Text(
+                    'Loading...',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                )
+              ];
+            }
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: children,
               ),
-              Column(
-                children: [
-                  buildText(
-                      'Good Day, Jack!', Theme.of(context).textTheme.headline5),
-                ],
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 35, right: 35, bottom: 35),
-          child: AccountCard(),
+            );
+          },
         ),
         Padding(
           padding: const EdgeInsets.only(left: 35, right: 35, bottom: 35),
@@ -153,24 +211,6 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              style: raisedButtonStyle,
-              onPressed: () {
-                Navigator.pushNamed(context, '/drive');
-              },
-              child: Row(
-                children: [
-                  buildText('Drive', TextStyle(fontSize: 22)),
-                  Padding(padding: const EdgeInsets.all(2)),
-                  Icon(Icons.double_arrow)
-                ],
-              ),
-            )
-          ],
-        )
       ],
     );
   }
@@ -185,6 +225,8 @@ class HomeScreen extends StatelessWidget {
 }
 
 class AccountCard extends StatelessWidget {
+  final String fullName;
+  AccountCard(this.fullName);
   Widget buildText(text, style) {
     return Container(
       child: FittedBox(
@@ -209,7 +251,7 @@ class AccountCard extends StatelessWidget {
                   'Ebl titanium account',
                   TextStyle(color: Colors.white),
                 ),
-                buildText('Jack Sim', TextStyle(color: Colors.white)),
+                buildText(this.fullName, TextStyle(color: Colors.white)),
               ],
             ),
             Row(

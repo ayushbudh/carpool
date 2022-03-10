@@ -16,7 +16,6 @@ class _LaunchScreenState extends State<LaunchScreen> {
   Widget build(BuildContext context) {
     final PageController controller = PageController();
     final user = Provider.of<User?>(context);
-
     if (user == null) {
       final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
         onPrimary: Colors.black87,
@@ -114,7 +113,8 @@ class _LaunchScreenState extends State<LaunchScreen> {
                     child: ElevatedButton(
                       style: raisedButtonStyle,
                       onPressed: () {
-                        Navigator.pushNamed(context, '/launchscreenoptions');
+                        Navigator.pushReplacementNamed(
+                            context, '/launchscreenoptions');
                       },
                       child: const Text('Let\'s Go'),
                     ))

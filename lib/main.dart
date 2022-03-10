@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
               value: AuthService().user,
               child: LaunchScreen(),
             ),
-        '/auth': (context) => AuthScreen(),
+        '/auth': (context) => AuthScreen("None"),
         '/home': (context) => BaseScreen(),
       },
     );

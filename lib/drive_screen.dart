@@ -31,6 +31,7 @@ class DriveScreenState extends State<DriveScreen> {
       extendBodyBehindAppBar: true,
       backgroundColor: Color(0xffEEEEEE),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Center(
@@ -67,13 +68,16 @@ class DriveScreenState extends State<DriveScreen> {
                       },
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: 'Pick up',
+                        labelText: 'Origin',
                       ),
                     ),
                   )
                 ],
               )
             ],
+          ),
+          const SizedBox(
+            height: 30.0,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -119,8 +123,6 @@ class DriveScreenState extends State<DriveScreen> {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => MapScreen(
                             _pickup.value.text, _destination.value.text)));
-
-                    // Navigator.pushNamed(context, '/drive');
                   },
                   child: Row(
                     children: [
