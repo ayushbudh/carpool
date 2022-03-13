@@ -1,5 +1,4 @@
 import 'package:carpool_app/auth.dart';
-import 'package:carpool_app/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:carpool_app/drive_screen.dart';
 import 'package:provider/provider.dart';
