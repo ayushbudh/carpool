@@ -4,7 +4,8 @@ import 'package:carpool_app/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen();
+  final String role;
+  const SignUpScreen(this.role);
 
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
@@ -21,17 +22,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _success = true;
   String _failureReason = '';
 
-  void _loginSignupNavigator(BuildContext context, String url) {
-    Navigator.of(context).pushReplacementNamed(url);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final widthSize = MediaQuery.of(context).size.width;
+    final heightSize = MediaQuery.of(context).size.height;
+
     return Scaffold(
         backgroundColor: Color(0xff199EFF),
         body: Container(
-          padding: const EdgeInsets.all(40),
-          margin: const EdgeInsets.only(top: 60),
+          padding: EdgeInsets.all(heightSize * 0.05),
+          margin: EdgeInsets.only(top: heightSize * 0.02),
           child: Form(
             key: _formKey, // NEW
             child: Column(
@@ -39,7 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               children: [
                 Text('Sign up',
                     style: TextStyle(
-                        fontSize: 30,
+                        fontSize: heightSize * 0.05,
                         fontWeight: FontWeight.bold,
                         color: Colors.white)),
                 Container(
@@ -60,10 +60,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.only(bottom: heightSize * 0.01),
                   child: TextFormField(
                     controller: _firstName,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(heightSize * 0.03),
                       hintText: 'First Name',
                       border: OutlineInputBorder(),
                       fillColor: Colors.white,
@@ -78,10 +80,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.only(bottom: heightSize * 0.01),
                   child: TextFormField(
                     controller: _lastName,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(heightSize * 0.03),
                       hintText: 'Last Name',
                       border: OutlineInputBorder(),
                       fillColor: Colors.white,
@@ -96,10 +100,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.only(bottom: heightSize * 0.01),
                   child: TextFormField(
                     controller: _emailController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(heightSize * 0.03),
                       hintText: 'Email',
                       border: OutlineInputBorder(),
                       fillColor: Colors.white,
@@ -114,11 +120,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.only(bottom: heightSize * 0.01),
                   child: TextFormField(
                     controller: _passwordController,
                     obscureText: true,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(heightSize * 0.03),
                       hintText: 'Password',
                       border: OutlineInputBorder(),
                       fillColor: Colors.white,
@@ -135,7 +143,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ElevatedButton(
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all(
-                      EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
+                      EdgeInsets.symmetric(
+                          horizontal: widthSize * 0.04,
+                          vertical: heightSize * 0.02),
                     ),
                     foregroundColor: MaterialStateProperty.resolveWith(
                         (Set<MaterialState> states) {
@@ -154,12 +164,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     // Validate returns true if the form is valid, or false otherwise.
                     if (_formKey.currentState!.validate()) {
                       String response = await _auth.signUp(
-                        context,
-                        _firstName.value.text,
-                        _lastName.value.text,
-                        _emailController.value.text,
-                        _passwordController.value.text,
-                      );
+                          context,
+                          _firstName.value.text,
+                          _lastName.value.text,
+                          _emailController.value.text,
+                          _passwordController.value.text,
+                          widget.role);
 
                       if (response != "None") {
                         setState(() {
@@ -173,12 +183,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: const Text('Sign up'),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: EdgeInsets.all(heightSize * 0.005),
                 ),
                 ElevatedButton(
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all(
-                      EdgeInsets.symmetric(vertical: 20.0, horizontal: 38.0),
+                      EdgeInsets.symmetric(
+                          horizontal: widthSize * 0.04,
+                          vertical: heightSize * 0.02),
                     ),
                     foregroundColor: MaterialStateProperty.resolveWith(
                         (Set<MaterialState> states) {
@@ -198,42 +210,52 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     try {
                       UserCredential? user = await _auth.signInWithGoogle();
                       if (user != null) {
+                        _auth.storeGoogleUserInCollection(user);
                         Navigator.of(context).pushReplacementNamed("/home");
                       }
                     } catch (e) {
-                      print(e);
+                      setState(() {
+                        _success = false;
+                        _failureReason =
+                            "Google signup failed. Please try again later!";
+                      });
                     }
                   },
                   // UPDATED
                   child: const Text('Google Signup'),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(50),
+                  padding: EdgeInsets.all(heightSize * 0.03),
                 ),
                 Container(
-                  margin: const EdgeInsets.only(bottom: 10),
+                  margin: EdgeInsets.only(bottom: heightSize * 0.01),
                   child: Text(
                     'Already have an account ?',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 17,
+                      fontSize: heightSize * 0.025,
                     ),
                   ),
                 ),
-                Container(
-                    width: 150,
-                    decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.all(Radius.circular(50.0))),
-                    child: Center(
-                      child: Text(
-                        "Swipe right >",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 17,
+                Padding(
+                  padding: EdgeInsets.only(bottom: heightSize * 0.01),
+                  child: Container(
+                      height: heightSize * 0.03,
+                      width: heightSize * 0.20,
+                      decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(50.0))),
+                      child: Center(
+                        child: Text(
+                          "Swipe right",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: heightSize * 0.02,
+                          ),
                         ),
-                      ),
-                    )),
+                      )),
+                ),
               ],
             ),
           ),

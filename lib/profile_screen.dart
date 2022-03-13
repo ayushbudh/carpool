@@ -1,15 +1,32 @@
+import 'package:carpool_app/auth.dart';
 import 'package:flutter/material.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+class ProfileScreen extends StatefulWidget {
+  ProfileScreen({Key? key}) : super(key: key);
+
+  ProfileScreenState createState() => ProfileScreenState();
+}
+
+class ProfileScreenState extends State<ProfileScreen> {
+  final AuthService _auth = AuthService();
+  late TextEditingController _emailController;
+
+  @override
+  void initState() {
+    _emailController = TextEditingController(text: _auth.getEmail());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final widthSize = MediaQuery.of(context).size.width;
+    final heightSize = MediaQuery.of(context).size.height;
     final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
       onPrimary: Colors.white,
       primary: const Color(0xffFF1522),
-      minimumSize: const Size(80, 30),
-      padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 17),
+      minimumSize: Size(widthSize * 0.20, heightSize * 0.01),
+      padding: EdgeInsets.symmetric(
+          horizontal: widthSize * 0.07, vertical: heightSize * 0.01),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(30)),
       ),
@@ -26,7 +43,8 @@ class ProfileScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 80, bottom: 20),
                 child: Text(
                   'Profile',
-                  style: TextStyle(fontSize: 32, color: Colors.white),
+                  style: TextStyle(
+                      fontSize: heightSize * 0.05, color: Colors.white),
                 ),
               )
             ],
@@ -35,43 +53,31 @@ class ProfileScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 50),
-                child: Icon(Icons.account_circle, size: 80),
+                padding: EdgeInsets.only(bottom: heightSize * 0.10),
+                child: Icon(Icons.account_circle, size: heightSize * 0.10),
               )
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 200),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(children: [
-                  Text(
-                    'Email: ',
-                    style: TextStyle(fontSize: 20, color: Colors.white),
-                  ),
-                ]),
-                Column(
-                  children: [
-                    Container(
-                      height: 35,
-                      width: 190,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Text(
-                          "hello@hello.com",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(13))),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
+              padding: EdgeInsets.only(
+                  bottom: heightSize * 0.10,
+                  right: widthSize * 0.10,
+                  left: widthSize * 0.10),
+              child: Container(
+                child: TextField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                        labelText: 'Email',
+                        border: OutlineInputBorder(),
+                        fillColor: Colors.white,
+                        labelStyle: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            backgroundColor: Color(0xff199EFF)),
+                        filled: true,
+                        enabled: false)),
+              )),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -82,9 +88,11 @@ class ProfileScreen extends StatelessWidget {
                   onPressed: () {},
                   child: Row(
                     children: [
-                      Text('Change Password', style: TextStyle(fontSize: 17)),
-                      Padding(padding: const EdgeInsets.all(2)),
-                      Icon(Icons.double_arrow),
+                      Text('Change Password',
+                          style: TextStyle(fontSize: heightSize * 0.02)),
+                      Padding(
+                          padding: EdgeInsets.only(right: heightSize * 0.01)),
+                      Icon(Icons.double_arrow, size: heightSize * 0.04),
                     ],
                   ),
                 ),
@@ -96,12 +104,21 @@ class ProfileScreen extends StatelessWidget {
             children: [
               ElevatedButton(
                 style: raisedButtonStyle,
-                onPressed: () {},
+                onPressed: () async {
+                  var res = await _auth.signOut();
+                  if (res == 'SUCCESS') {
+                    Navigator.of(context)
+                        .pushReplacementNamed('/launchscreenoptions');
+                  } else {
+                    print("Something went wrong. Please try again!");
+                  }
+                },
                 child: Row(
                   children: [
-                    Text('Log out', style: TextStyle(fontSize: 17)),
-                    Padding(padding: const EdgeInsets.all(2)),
-                    Icon(Icons.logout),
+                    Text('Log out',
+                        style: TextStyle(fontSize: heightSize * 0.02)),
+                    Padding(padding: EdgeInsets.only(right: heightSize * 0.01)),
+                    Icon(Icons.logout, size: heightSize * 0.04),
                   ],
                 ),
               ),

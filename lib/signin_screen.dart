@@ -19,17 +19,16 @@ class _SignInScreenState extends State<SignInScreen> {
   String _failureReason = '';
   final AuthService _auth = AuthService();
 
-  void _loginSignupNavigator(BuildContext context, String url) {
-    Navigator.of(context).pushReplacementNamed(url);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final widthSize = MediaQuery.of(context).size.width;
+    final heightSize = MediaQuery.of(context).size.height;
+
     return Scaffold(
         backgroundColor: Color(0xff199EFF),
         body: Container(
-          padding: const EdgeInsets.all(40),
-          margin: const EdgeInsets.only(top: 60),
+          padding: EdgeInsets.all(heightSize * 0.05),
+          margin: EdgeInsets.only(top: heightSize * 0.02),
           child: Form(
             key: _formKey, // NEW
             child: Column(
@@ -37,10 +36,11 @@ class _SignInScreenState extends State<SignInScreen> {
               children: [
                 Text('Sign In',
                     style: TextStyle(
-                        fontSize: 30,
+                        fontSize: heightSize * 0.05,
                         fontWeight: FontWeight.bold,
                         color: Colors.white)),
                 Container(
+                  width: widthSize * 0.60,
                   alignment: Alignment.center,
                   child: _success
                       ? Text("")
@@ -51,15 +51,18 @@ class _SignInScreenState extends State<SignInScreen> {
                               border: Border.all(color: Colors.red)),
                           child: Text(
                             _success ? '' : _failureReason,
-                            style: const TextStyle(color: Colors.red),
+                            style: TextStyle(
+                                color: Colors.red, fontSize: heightSize * 0.02),
                           ),
                         ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.only(bottom: heightSize * 0.01),
                   child: TextFormField(
                     controller: _emailController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(heightSize * 0.03),
                       hintText: 'Email',
                       border: OutlineInputBorder(),
                       fillColor: Colors.white,
@@ -74,11 +77,13 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: EdgeInsets.only(bottom: heightSize * 0.01),
                   child: TextFormField(
                     controller: _passwordController,
                     obscureText: true,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(heightSize * 0.03),
                       hintText: 'Password',
                       border: OutlineInputBorder(),
                       fillColor: Colors.white,
@@ -95,7 +100,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 ElevatedButton(
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all(
-                      EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
+                      EdgeInsets.symmetric(
+                          horizontal: widthSize * 0.04,
+                          vertical: heightSize * 0.02),
                     ),
                     foregroundColor: MaterialStateProperty.resolveWith(
                         (Set<MaterialState> states) {
@@ -114,10 +121,12 @@ class _SignInScreenState extends State<SignInScreen> {
                     // Validate returns true if the form is valid, or false otherwise.
                     if (_formKey.currentState!.validate()) {
                       String response = await _auth.sigInWithEmail(
-                          context,
-                          _emailController.value.text,
-                          _passwordController.value.text);
+                        context,
+                        _emailController.value.text,
+                        _passwordController.value.text,
+                      );
 
+                      print(response);
                       if (response != "None") {
                         setState(() {
                           _success = false;
@@ -130,12 +139,14 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: const Text('Sign In'),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(5),
+                  padding: EdgeInsets.all(heightSize * 0.005),
                 ),
                 ElevatedButton(
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all(
-                      EdgeInsets.symmetric(vertical: 20.0, horizontal: 38.0),
+                      EdgeInsets.symmetric(
+                          horizontal: widthSize * 0.04,
+                          vertical: heightSize * 0.02),
                     ),
                     foregroundColor: MaterialStateProperty.resolveWith(
                         (Set<MaterialState> states) {
@@ -155,36 +166,43 @@ class _SignInScreenState extends State<SignInScreen> {
                     try {
                       UserCredential? user = await _auth.signInWithGoogle();
                       if (user != null) {
+                        _auth.storeGoogleUserInCollection(user);
                         Navigator.of(context).pushReplacementNamed("/home");
                       }
                     } catch (e) {
-                      print(e);
+                      setState(() {
+                        _success = false;
+                        _failureReason =
+                            "Google signin failed. Please try again later!";
+                      });
                     }
                   },
                   // UPDATED
                   child: const Text('Google Signin'),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(50),
+                  padding: EdgeInsets.all(heightSize * 0.03),
                 ),
                 Container(
-                  margin: const EdgeInsets.only(bottom: 10),
+                  margin: EdgeInsets.only(bottom: heightSize * 0.01),
                   child: Text(
                     'Don\'t have an account ?',
-                    style: TextStyle(color: Colors.white, fontSize: 17),
+                    style: TextStyle(
+                        color: Colors.white, fontSize: heightSize * 0.025),
                   ),
                 ),
                 Container(
-                    width: 150,
+                    height: heightSize * 0.03,
+                    width: heightSize * 0.20,
                     decoration: const BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.all(Radius.circular(50.0))),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        "< Swipe left",
+                        "Swipe left",
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 17,
+                          fontSize: heightSize * 0.02,
                         ),
                       ),
                     )),

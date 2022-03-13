@@ -4,8 +4,8 @@ import 'package:carpool_app/signup_screen.dart';
 import 'package:carpool_app/signin_screen.dart';
 
 class AuthScreen extends StatefulWidget {
-  const AuthScreen({Key? key}) : super(key: key);
-
+  final String role;
+  const AuthScreen(this.role);
   _AuthScreenState createState() => _AuthScreenState();
 }
 
@@ -31,7 +31,7 @@ class _AuthScreenState extends State<AuthScreen> {
             /// Use [Axis.vertical] to scroll vertically.
             controller: controller,
             children: <Widget>[
-              SignUpScreen(),
+              SignUpScreen(widget.role),
               SignInScreen(),
             ],
           ),

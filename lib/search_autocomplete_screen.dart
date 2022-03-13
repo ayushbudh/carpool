@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:carpool_app/drive_screen.dart';
 import 'package:carpool_app/location_services.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +26,7 @@ class _SearchAutoCompleteScreenState extends State<SearchAutoCompleteScreen> {
   Widget build(BuildContext build) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xff199EFF),
         // The search area here
         title: Container(
           width: double.infinity,
@@ -42,6 +40,7 @@ class _SearchAutoCompleteScreenState extends State<SearchAutoCompleteScreen> {
                 setSearchResults(value);
               },
               decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search),
                   suffixIcon: IconButton(
                     icon: Icon(Icons.clear),
                     onPressed: () {
@@ -81,7 +80,8 @@ class _SearchAutoCompleteScreenState extends State<SearchAutoCompleteScreen> {
                     : Container(),
                 ListTile(
                   title: Image.network(
-                      'https://developers.google.com/maps/documentation/images/powered_by_google_on_white.png'),
+                    'https://developers.google.com/maps/documentation/images/powered_by_google_on_white.png',
+                  ),
                 )
               ]);
             } else {
