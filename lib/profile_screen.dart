@@ -19,11 +19,14 @@ class ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final widthSize = MediaQuery.of(context).size.width;
+    final heightSize = MediaQuery.of(context).size.height;
     final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
       onPrimary: Colors.white,
       primary: const Color(0xffFF1522),
-      minimumSize: const Size(80, 30),
-      padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 17),
+      minimumSize: Size(widthSize * 0.20, heightSize * 0.01),
+      padding: EdgeInsets.symmetric(
+          horizontal: widthSize * 0.07, vertical: heightSize * 0.01),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(30)),
       ),
@@ -40,7 +43,8 @@ class ProfileScreenState extends State<ProfileScreen> {
                 padding: const EdgeInsets.only(top: 80, bottom: 20),
                 child: Text(
                   'Profile',
-                  style: TextStyle(fontSize: 32, color: Colors.white),
+                  style: TextStyle(
+                      fontSize: heightSize * 0.05, color: Colors.white),
                 ),
               )
             ],
@@ -49,13 +53,16 @@ class ProfileScreenState extends State<ProfileScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 50),
-                child: Icon(Icons.account_circle, size: 80),
+                padding: EdgeInsets.only(bottom: heightSize * 0.10),
+                child: Icon(Icons.account_circle, size: heightSize * 0.10),
               )
             ],
           ),
           Padding(
-              padding: const EdgeInsets.only(bottom: 100, right: 20, left: 20),
+              padding: EdgeInsets.only(
+                  bottom: heightSize * 0.10,
+                  right: widthSize * 0.10,
+                  left: widthSize * 0.10),
               child: Container(
                 child: TextField(
                     controller: _emailController,
@@ -81,9 +88,11 @@ class ProfileScreenState extends State<ProfileScreen> {
                   onPressed: () {},
                   child: Row(
                     children: [
-                      Text('Change Password', style: TextStyle(fontSize: 17)),
-                      Padding(padding: const EdgeInsets.all(2)),
-                      Icon(Icons.double_arrow),
+                      Text('Change Password',
+                          style: TextStyle(fontSize: heightSize * 0.02)),
+                      Padding(
+                          padding: EdgeInsets.only(right: heightSize * 0.01)),
+                      Icon(Icons.double_arrow, size: heightSize * 0.04),
                     ],
                   ),
                 ),
@@ -106,9 +115,10 @@ class ProfileScreenState extends State<ProfileScreen> {
                 },
                 child: Row(
                   children: [
-                    Text('Log out', style: TextStyle(fontSize: 17)),
-                    Padding(padding: const EdgeInsets.all(2)),
-                    Icon(Icons.logout),
+                    Text('Log out',
+                        style: TextStyle(fontSize: heightSize * 0.02)),
+                    Padding(padding: EdgeInsets.only(right: heightSize * 0.01)),
+                    Icon(Icons.logout, size: heightSize * 0.04),
                   ],
                 ),
               ),

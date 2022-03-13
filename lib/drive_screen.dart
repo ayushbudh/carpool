@@ -12,21 +12,25 @@ class DriveScreen extends StatefulWidget {
 }
 
 class DriveScreenState extends State<DriveScreen> {
-  final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
-    onPrimary: Colors.white,
-    primary: const Color(0xff199EFF),
-    minimumSize: const Size(160, 50),
-    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(30)),
-    ),
-  );
-
   final TextEditingController _pickup = TextEditingController();
   final TextEditingController _destination = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final widthSize = MediaQuery.of(context).size.width;
+    final heightSize = MediaQuery.of(context).size.height;
+
+    final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
+      onPrimary: Colors.white,
+      primary: const Color(0xff199EFF),
+      minimumSize: Size(widthSize * 0.20, heightSize * 0.02),
+      padding: EdgeInsets.symmetric(
+          horizontal: widthSize * 0.07, vertical: heightSize * 0.02),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(30)),
+      ),
+    );
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Color(0xffEEEEEE),
@@ -38,25 +42,27 @@ class DriveScreenState extends State<DriveScreen> {
             child: Text(
           "Drive",
           style: TextStyle(
-              fontSize: 30, fontWeight: FontWeight.bold, color: Colors.black),
+              fontSize: heightSize * 0.05,
+              fontWeight: FontWeight.bold,
+              color: Colors.black),
         )),
       ),
       body: Column(
         children: [
-          const SizedBox(
-            height: 180.0,
+          SizedBox(
+            height: heightSize * 0.20,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Column(
                 children: [
-                  Icon(Icons.location_on_outlined, size: 50),
+                  Icon(Icons.location_on_outlined, size: heightSize * 0.065),
                 ],
               ),
               Column(
                 children: [
-                  SizedBox(
+                  Container(
                     width: 240,
                     height: 60,
                     child: TextField(
@@ -67,6 +73,8 @@ class DriveScreenState extends State<DriveScreen> {
                                 SearchAutoCompleteScreen(_pickup)));
                       },
                       decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding: EdgeInsets.all(heightSize * 0.03),
                         border: OutlineInputBorder(),
                         labelText: 'Origin',
                       ),
@@ -76,20 +84,20 @@ class DriveScreenState extends State<DriveScreen> {
               )
             ],
           ),
-          const SizedBox(
-            height: 30.0,
+          SizedBox(
+            height: heightSize * 0.01,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Column(
                 children: [
-                  Icon(Icons.location_on, size: 50),
+                  Icon(Icons.location_on, size: heightSize * 0.065),
                 ],
               ),
               Column(
                 children: [
-                  SizedBox(
+                  Container(
                     width: 240,
                     height: 60,
                     child: TextField(
@@ -100,6 +108,8 @@ class DriveScreenState extends State<DriveScreen> {
                                 SearchAutoCompleteScreen(_destination)));
                       },
                       decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding: EdgeInsets.all(heightSize * 0.03),
                         border: OutlineInputBorder(),
                         labelText: 'Destination',
                       ),
@@ -116,7 +126,7 @@ class DriveScreenState extends State<DriveScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 15),
+                padding: EdgeInsets.only(left: widthSize * 0.01),
                 child: ElevatedButton(
                   style: raisedButtonStyle,
                   onPressed: () async {
@@ -126,11 +136,13 @@ class DriveScreenState extends State<DriveScreen> {
                   },
                   child: Row(
                     children: [
-                      Text('Start', style: TextStyle(fontSize: 22)),
-                      Padding(padding: const EdgeInsets.all(2)),
+                      Text('Start',
+                          style: TextStyle(fontSize: heightSize * 0.03)),
+                      Padding(
+                          padding: EdgeInsets.only(right: widthSize * 0.01)),
                       Icon(
                         Icons.drive_eta,
-                        size: 30,
+                        size: heightSize * 0.04,
                       )
                     ],
                   ),

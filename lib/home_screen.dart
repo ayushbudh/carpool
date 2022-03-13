@@ -8,6 +8,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final widthSize = MediaQuery.of(context).size.width;
+    final heightSize = MediaQuery.of(context).size.height;
     final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
       onPrimary: Colors.white,
       primary: const Color(0xff199EFF),
@@ -28,29 +30,36 @@ class HomeScreen extends StatelessWidget {
             if (snapshot.hasData) {
               children = <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(
-                      top: 50.0, left: 20.0, bottom: 20.0),
+                  padding: EdgeInsets.only(
+                      top: heightSize * 0.02, left: widthSize * 0.03),
                   child: Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(Icons.account_circle, size: 50),
+                        padding: EdgeInsets.all(widthSize * 0.02),
+                        child: Icon(Icons.account_circle,
+                            size: heightSize * 0.065),
                       ),
                       Column(
                         children: [
                           buildText('Good Day, ${snapshot.data!["firstName"]}',
-                              Theme.of(context).textTheme.headline5),
+                              TextStyle(fontSize: heightSize * 0.03)),
                         ],
                       ),
                     ],
                   ),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 35, right: 35, bottom: 35),
-                  child: AccountCard(snapshot.data!["firstName"] +
-                      " " +
-                      snapshot.data!["lastName"]),
+                  padding: EdgeInsets.only(
+                      left: widthSize * 0.07,
+                      right: widthSize * 0.07,
+                      top: heightSize * 0.02,
+                      bottom: heightSize * 0.02),
+                  child: AccountCard(
+                      snapshot.data!["firstName"] +
+                          " " +
+                          snapshot.data!["lastName"],
+                      heightSize,
+                      widthSize),
                 ),
               ];
             } else if (snapshot.hasError) {
@@ -98,119 +107,65 @@ class HomeScreen extends StatelessWidget {
           },
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 35, right: 35, bottom: 35),
+          padding: EdgeInsets.only(
+              left: widthSize * 0.07,
+              right: widthSize * 0.07,
+              top: heightSize * 0.02,
+              bottom: heightSize * 0.02),
           child: Row(
             children: [
               buildText(
-                  'Recent Activity', Theme.of(context).textTheme.headline6),
+                  'Recent Activity', TextStyle(fontSize: heightSize * 0.03)),
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 35, right: 35, bottom: 35),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Icon(Icons.account_circle, size: 50),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      buildText('Rebeka ratry',
-                          Theme.of(context).textTheme.headline6),
-                      Padding(padding: const EdgeInsets.all(3)),
-                      buildText(
-                          '22 Jan 2020', Theme.of(context).textTheme.bodyText2),
-                    ],
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  buildText('+\$1,190.00', TextStyle()),
-                  Padding(padding: const EdgeInsets.all(3)),
-                  buildText('03:25am', TextStyle()),
-                ],
-              )
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 35, right: 35, bottom: 35),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Icon(Icons.account_circle, size: 50),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      buildText('Rebeka ratry',
-                          Theme.of(context).textTheme.headline6),
-                      Padding(padding: const EdgeInsets.all(3)),
-                      buildText(
-                          '22 Jan 2020', Theme.of(context).textTheme.bodyText2),
-                    ],
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  buildText('+\$1,190.00', TextStyle()),
-                  Padding(padding: const EdgeInsets.all(3)),
-                  buildText('03:25am', TextStyle()),
-                ],
-              )
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 35, right: 35, bottom: 35),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Icon(Icons.account_circle, size: 50),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      buildText('Rebeka ratry',
-                          Theme.of(context).textTheme.headline6),
-                      Padding(padding: const EdgeInsets.all(3)),
-                      buildText(
-                          '22 Jan 2020', Theme.of(context).textTheme.bodyText2),
-                    ],
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  buildText('+\$1,190.00', TextStyle()),
-                  Padding(padding: const EdgeInsets.all(3)),
-                  buildText('03:25am', TextStyle()),
-                ],
-              )
-            ],
-          ),
-        ),
+        Container(
+            margin: EdgeInsets.only(
+                left: widthSize * 0.07, right: widthSize * 0.07),
+            decoration: BoxDecoration(
+                color: Color.fromARGB(255, 226, 224, 224),
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            height: heightSize * 0.40,
+            child: ListView(
+              padding: const EdgeInsets.all(8),
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Icon(Icons.account_circle,
+                              size: heightSize * 0.065),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            buildText('Rebeka ratry',
+                                TextStyle(fontSize: widthSize * 0.04)),
+                            Padding(padding: const EdgeInsets.all(3)),
+                            buildText('22 Jan 2020',
+                                TextStyle(fontSize: widthSize * 0.04)),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        buildText('+\$1,190.00',
+                            TextStyle(fontSize: widthSize * 0.04)),
+                        Padding(padding: const EdgeInsets.all(3)),
+                        buildText(
+                            '03:25am', TextStyle(fontSize: widthSize * 0.04)),
+                      ],
+                    )
+                  ],
+                ),
+              ],
+            ))
       ],
     );
   }
@@ -226,7 +181,9 @@ class HomeScreen extends StatelessWidget {
 
 class AccountCard extends StatelessWidget {
   final String fullName;
-  AccountCard(this.fullName);
+  final double heightSize;
+  final double widthSize;
+  AccountCard(this.fullName, this.heightSize, this.widthSize);
   Widget buildText(text, style) {
     return Container(
       child: FittedBox(
@@ -238,7 +195,7 @@ class AccountCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 170,
+      height: heightSize * 0.22,
       child: Padding(
         padding: const EdgeInsets.all(11.0),
         child: Column(
@@ -249,9 +206,10 @@ class AccountCard extends StatelessWidget {
               children: [
                 buildText(
                   'Ebl titanium account',
-                  TextStyle(color: Colors.white),
+                  TextStyle(color: Colors.white, fontSize: widthSize * 0.03),
                 ),
-                buildText(this.fullName, TextStyle(color: Colors.white)),
+                buildText(this.fullName,
+                    TextStyle(color: Colors.white, fontSize: widthSize * 0.03)),
               ],
             ),
             Row(
@@ -261,11 +219,13 @@ class AccountCard extends StatelessWidget {
                   children: [
                     buildText(
                       '\$6,190.00',
-                      TextStyle(fontSize: 40, color: Colors.white),
+                      TextStyle(
+                          fontSize: widthSize * 0.08, color: Colors.white),
                     ),
                     buildText(
                       'Total Balance',
-                      TextStyle(color: Colors.white),
+                      TextStyle(
+                          color: Colors.white, fontSize: widthSize * 0.03),
                     ),
                   ],
                 )
@@ -276,11 +236,11 @@ class AccountCard extends StatelessWidget {
               children: [
                 buildText(
                   'Added card:05',
-                  TextStyle(color: Colors.white),
+                  TextStyle(color: Colors.white, fontSize: widthSize * 0.03),
                 ),
                 buildText(
                   'Ac. no. 2234521',
-                  TextStyle(color: Colors.white),
+                  TextStyle(color: Colors.white, fontSize: widthSize * 0.03),
                 ),
               ],
             ),

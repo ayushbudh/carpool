@@ -1,7 +1,6 @@
 import 'package:carpool_app/base_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:carpool_app/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -14,14 +13,18 @@ class LaunchScreen extends StatefulWidget {
 class _LaunchScreenState extends State<LaunchScreen> {
   @override
   Widget build(BuildContext context) {
+    final widthSize = MediaQuery.of(context).size.width;
+    final heightSize = MediaQuery.of(context).size.height;
     final PageController controller = PageController();
     final user = Provider.of<User?>(context);
+
     if (user == null) {
       final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
         onPrimary: Colors.black87,
         primary: const Color(0xffFF1522),
-        minimumSize: const Size(88, 36),
-        padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+        minimumSize: Size(widthSize * 0.10, heightSize * 0.035),
+        padding: EdgeInsets.symmetric(
+            horizontal: widthSize * 0.10, vertical: heightSize * 0.035),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(5)),
         ),
@@ -36,60 +39,90 @@ class _LaunchScreenState extends State<LaunchScreen> {
               controller: controller,
               children: <Widget>[
                 Container(
-                  child: Stack(children: [
-                    const Center(
-                      child: Text(
-                        'Help Each Other',
-                        style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                  padding: EdgeInsets.only(left: 5, right: 5),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Help Each Other',
+                            style: TextStyle(
+                                fontSize: widthSize * 0.10,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          )
+                        ],
                       ),
-                      heightFactor: 13,
-                    ),
-                    const Center(
-                      child: Text(
-                        'Meet new people along the commute',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Meet new people along the commute',
+                            style: TextStyle(
+                                fontSize: widthSize * 0.05,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ],
                       ),
-                      heightFactor: 30,
-                    ),
-                    Center(
-                        child: Image.asset('assets/carouselscreen1.png',
-                            width: 500))
-                  ]),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/carouselscreen1.png',
+                            height: heightSize * 0.40,
+                            width: widthSize * 0.80,
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                   color: const Color(0xff199EFF),
                 ),
                 Container(
-                  child: Stack(children: [
-                    const Center(
-                      child: Text(
-                        'Save Environment',
-                        style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Save Environment',
+                            style: TextStyle(
+                                fontSize: widthSize * 0.10,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey),
+                          )
+                        ],
                       ),
-                      heightFactor: 10,
-                    ),
-                    const Center(
-                      child: Text(
-                        'Contribute towards sustainable future',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Contribute towards sustainable future',
+                            style: TextStyle(
+                                fontSize: widthSize * 0.05,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey),
+                          ),
+                        ],
                       ),
-                      heightFactor: 24,
-                    ),
-                    Center(
-                      child:
-                          Image.asset('assets/carouselscreen2.png', width: 220),
-                    )
-                  ]),
+                      Padding(
+                          padding: EdgeInsets.only(bottom: heightSize * 0.08)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/carouselscreen2.png',
+                            height: heightSize * 0.35,
+                            width: widthSize * 0.60,
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                   color: const Color(0xffF7F7F7),
                 ),
               ],
@@ -98,7 +131,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
-                  margin: const EdgeInsets.symmetric(vertical: 30.0),
+                  margin: EdgeInsets.symmetric(vertical: heightSize * 0.04),
                   child: Center(
                       child: SmoothPageIndicator(
                     controller: controller,
@@ -109,7 +142,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
                   )),
                 ),
                 Container(
-                    padding: const EdgeInsets.all(10),
+                    padding: EdgeInsets.all(heightSize * 0.02),
                     child: ElevatedButton(
                       style: raisedButtonStyle,
                       onPressed: () {

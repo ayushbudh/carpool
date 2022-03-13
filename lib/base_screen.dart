@@ -31,13 +31,15 @@ class _BaseScreenState extends State<BaseScreen> {
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color(0xff199EFF),
+        elevation: 0,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.home,
               ),
               label: 'Home',
-              backgroundColor: Colors.blue),
+              backgroundColor: Color(0xff199EFF)),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             label: 'Search',

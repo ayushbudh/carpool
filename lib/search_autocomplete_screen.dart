@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:carpool_app/drive_screen.dart';
 import 'package:carpool_app/location_services.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +80,8 @@ class _SearchAutoCompleteScreenState extends State<SearchAutoCompleteScreen> {
                     : Container(),
                 ListTile(
                   title: Image.network(
-                      'https://developers.google.com/maps/documentation/images/powered_by_google_on_white.png'),
+                    'https://developers.google.com/maps/documentation/images/powered_by_google_on_white.png',
+                  ),
                 )
               ]);
             } else {

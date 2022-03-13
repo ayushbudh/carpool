@@ -6,11 +6,15 @@ class LaunchScreenOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final widthSize = MediaQuery.of(context).size.width;
+    final heightSize = MediaQuery.of(context).size.height;
+
     final ButtonStyle optionButtonStyle = ElevatedButton.styleFrom(
       onPrimary: Colors.white,
       primary: const Color(0xffFF1522),
-      minimumSize: const Size(150, 20),
-      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+      minimumSize: Size(widthSize * 0.20, heightSize * 0.02),
+      padding: EdgeInsets.symmetric(
+          horizontal: widthSize * 0.07, vertical: heightSize * 0.02),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(5)),
       ),
@@ -21,18 +25,23 @@ class LaunchScreenOptions extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 150, bottom: 10),
-              child: Text(
-                'Select an option',
-                style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
+            SizedBox(
+              height: heightSize * 0.10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Select an option',
+                  style: TextStyle(
+                      fontSize: widthSize * 0.10,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
             ),
             Container(
-                padding: const EdgeInsets.all(10),
+                padding: EdgeInsets.all(heightSize * 0.05),
                 child: ElevatedButton(
                   style: optionButtonStyle,
                   onPressed: () {
@@ -42,7 +51,6 @@ class LaunchScreenOptions extends StatelessWidget {
                   child: const Text('Driver'),
                 )),
             Container(
-              padding: const EdgeInsets.all(10),
               child: ElevatedButton(
                 style: optionButtonStyle,
                 onPressed: () {

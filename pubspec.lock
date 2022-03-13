@@ -51,12 +51,12 @@ packages:
     source: hosted
     version: "5.5.1"
   cloud_firestore_web:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       name: cloud_firestore_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.6.8"
+    version: "2.6.10"
   collection:
     dependency: transitive
     description:
