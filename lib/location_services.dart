@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 class LocationService {
-  final String key = 'API-KEY';
+  final String key = 'API-Key';
 
   // currently not being used, this function is just for reference
   Future<Map<String, dynamic>> getPlaceID(String input) async {
@@ -52,8 +52,3 @@ class LocationService {
     return results;
   }
 }
-
-
-
-// Contribute towards sustainable future
-// Save Environment

@@ -27,17 +27,12 @@ class _MapScreenState extends State<MapScreen> {
   static LatLng latlng = LatLng(99999, 99999);
 
   Future<LatLng> _getUserLocation() async {
-    print("GET USER METHOD RUNNING =========");
-
     bool serviceEnabled;
     LocationPermission permission;
 
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
       return Future.error('Location services are disabled.');
     }
 
@@ -45,11 +40,6 @@ class _MapScreenState extends State<MapScreen> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
         return Future.error('Location permissions are denied');
       }
     }
@@ -60,8 +50,6 @@ class _MapScreenState extends State<MapScreen> {
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
@@ -77,8 +65,6 @@ class _MapScreenState extends State<MapScreen> {
         ),
       );
     });
-    print("======LAT LNG =======");
-    print(latlng);
     return latlng;
   }
 
@@ -133,8 +119,12 @@ class _MapScreenState extends State<MapScreen> {
     });
   }
 
+  double mapHeight = 0.70;
+
   @override
   Widget build(BuildContext context) {
+    final widthSize = MediaQuery.of(context).size.width;
+    final heightSize = MediaQuery.of(context).size.height;
     return latlng.latitude == 99999 && latlng.longitude == 99999
         ? Container(
             alignment: Alignment.center,
@@ -165,8 +155,8 @@ class _MapScreenState extends State<MapScreen> {
                   child: Row(
                     children: [
                       SizedBox(
-                        height: 500,
-                        width: 391,
+                        height: heightSize * mapHeight,
+                        width: widthSize,
                         child: GoogleMap(
                           myLocationButtonEnabled: true,
                           mapType: MapType.normal,
@@ -187,9 +177,9 @@ class _MapScreenState extends State<MapScreen> {
                 Expanded(
                     // children: [
                     child: Container(
-                  color: Colors.blue,
-                  height: 60,
-                  width: 391,
+                  decoration: BoxDecoration(
+                      color: const Color(0xff199EFF),
+                      borderRadius: BorderRadius.all(Radius.circular(25))),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -264,7 +254,9 @@ class _MapScreenState extends State<MapScreen> {
                               ),
                               SizedBox(height: 20),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  setMapHeight();
+                                },
                                 child: Text("Ride"),
                                 style: ButtonStyle(
                                   foregroundColor:
@@ -307,6 +299,12 @@ class _MapScreenState extends State<MapScreen> {
                 ))
               ],
             ));
+  }
+
+  void setMapHeight() {
+    setState(() {
+      mapHeight = 0.75;
+    });
   }
 
   void _getRoute(String origin, String destination) async {
