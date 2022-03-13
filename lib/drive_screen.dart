@@ -1,8 +1,7 @@
 import 'package:carpool_app/map_screen.dart';
 import 'package:carpool_app/search_autocomplete_screen.dart';
 import 'package:flutter/material.dart';
-import 'location_services.dart';
-import 'map_screen.dart' as _MapScreenState;
+import 'map_screen.dart';
 
 class DriveScreen extends StatefulWidget {
   DriveScreen();
