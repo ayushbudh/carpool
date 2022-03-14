@@ -184,6 +184,7 @@ class AccountCard extends StatelessWidget {
   final double heightSize;
   final double widthSize;
   AccountCard(this.fullName, this.heightSize, this.widthSize);
+
   Widget buildText(text, style) {
     return Container(
       child: FittedBox(
@@ -194,62 +195,69 @@ class AccountCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: heightSize * 0.22,
-      child: Padding(
-        padding: const EdgeInsets.all(11.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                buildText(
-                  'Ebl titanium account',
-                  TextStyle(color: Colors.white, fontSize: widthSize * 0.03),
-                ),
-                buildText(this.fullName,
-                    TextStyle(color: Colors.white, fontSize: widthSize * 0.03)),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    buildText(
-                      '\$6,190.00',
+    return InkWell(
+      child: Container(
+        height: heightSize * 0.22,
+        child: Padding(
+          padding: const EdgeInsets.all(11.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  buildText(
+                    'Ebl titanium account',
+                    TextStyle(color: Colors.white, fontSize: widthSize * 0.03),
+                  ),
+                  buildText(
+                      this.fullName,
                       TextStyle(
-                          fontSize: widthSize * 0.08, color: Colors.white),
-                    ),
-                    buildText(
-                      'Total Balance',
-                      TextStyle(
-                          color: Colors.white, fontSize: widthSize * 0.03),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                buildText(
-                  'Added card:05',
-                  TextStyle(color: Colors.white, fontSize: widthSize * 0.03),
-                ),
-                buildText(
-                  'Ac. no. 2234521',
-                  TextStyle(color: Colors.white, fontSize: widthSize * 0.03),
-                ),
-              ],
-            ),
-          ],
+                          color: Colors.white, fontSize: widthSize * 0.03)),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                      buildText(
+                        '\$6,190.00',
+                        TextStyle(
+                            fontSize: widthSize * 0.08, color: Colors.white),
+                      ),
+                      buildText(
+                        'Total Balance',
+                        TextStyle(
+                            color: Colors.white, fontSize: widthSize * 0.03),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  buildText(
+                    'Added card:05',
+                    TextStyle(color: Colors.white, fontSize: widthSize * 0.03),
+                  ),
+                  buildText(
+                    'Ac. no. 2234521',
+                    TextStyle(color: Colors.white, fontSize: widthSize * 0.03),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
+        decoration: BoxDecoration(
+            color: const Color(0xff199EFF),
+            borderRadius: BorderRadius.all(Radius.circular(10))),
       ),
-      decoration: BoxDecoration(
-          color: const Color(0xff199EFF),
-          borderRadius: BorderRadius.all(Radius.circular(10))),
+      onTap: () {
+        print("go to account card");
+      },
     );
   }
 }

@@ -53,9 +53,67 @@ class ProfileScreenState extends State<ProfileScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsets.only(bottom: heightSize * 0.10),
+                padding: EdgeInsets.only(bottom: heightSize * 0.0),
                 child: Icon(Icons.account_circle, size: heightSize * 0.10),
               )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                  padding: EdgeInsets.only(bottom: heightSize * 0.10),
+                  child: FutureBuilder<Map>(
+                      future: _auth.getFullName(),
+                      builder:
+                          (BuildContext context, AsyncSnapshot<Map> snapshot) {
+                        List<Widget> children;
+                        if (snapshot.hasData) {
+                          children = <Widget>[
+                            Text(
+                              snapshot.data!["firstName"] +
+                                  " " +
+                                  snapshot.data!["lastName"],
+                              style: TextStyle(
+                                  fontSize: heightSize * 0.03,
+                                  color: Colors.white),
+                            ),
+                          ];
+                        } else if (snapshot.hasError) {
+                          children = <Widget>[
+                            const Icon(
+                              Icons.error_outline,
+                              color: Colors.red,
+                              size: 40,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10, bottom: 15),
+                              child: Text(
+                                  'We are having some problem getting your details. Please try again later.',
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold)),
+                            )
+                          ];
+                        } else {
+                          children = const <Widget>[
+                            SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.black,
+                              ),
+                            ),
+                          ];
+                        }
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: children,
+                          ),
+                        );
+                      }))
             ],
           ),
           Padding(

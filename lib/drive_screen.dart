@@ -72,8 +72,6 @@ class DriveScreenState extends State<DriveScreen> {
                                 SearchAutoCompleteScreen(_pickup)));
                       },
                       decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: EdgeInsets.all(heightSize * 0.03),
                         border: OutlineInputBorder(),
                         labelText: 'Origin',
                       ),
@@ -107,8 +105,6 @@ class DriveScreenState extends State<DriveScreen> {
                                 SearchAutoCompleteScreen(_destination)));
                       },
                       decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: EdgeInsets.all(heightSize * 0.03),
                         border: OutlineInputBorder(),
                         labelText: 'Destination',
                       ),
