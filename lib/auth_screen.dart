@@ -32,7 +32,7 @@ class _AuthScreenState extends State<AuthScreen> {
             controller: controller,
             children: <Widget>[
               SignUpScreen(widget.role),
-              SignInScreen(),
+              SignInScreen(widget.role),
             ],
           ),
           Column(

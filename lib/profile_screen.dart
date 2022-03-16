@@ -81,18 +81,21 @@ class ProfileScreenState extends State<ProfileScreen> {
                           ];
                         } else if (snapshot.hasError) {
                           children = <Widget>[
-                            const Icon(
-                              Icons.error_outline,
-                              color: Colors.red,
-                              size: 40,
+                            Padding(
+                              padding: EdgeInsets.only(top: heightSize * 0.01),
+                              child: Icon(Icons.error_outline,
+                                  color: Colors.red, size: heightSize * 0.06),
                             ),
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 10, bottom: 15),
+                              padding: EdgeInsets.only(
+                                  top: heightSize * 0.02,
+                                  bottom: 15,
+                                  left: widthSize * 0.02,
+                                  right: widthSize * 0.02),
                               child: Text(
-                                  'We are having some problem getting your details. Please try again later.',
+                                  'We are having some problem getting your details. \n Please try again later.',
                                   style: TextStyle(
-                                      fontSize: 13,
+                                      fontSize: widthSize * 0.035,
                                       fontWeight: FontWeight.bold)),
                             )
                           ];

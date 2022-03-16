@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'auth.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen();
+  final String role;
+  const SignInScreen(this.role);
 
   @override
   _SignInScreenState createState() => _SignInScreenState();
@@ -121,11 +122,10 @@ class _SignInScreenState extends State<SignInScreen> {
                     // Validate returns true if the form is valid, or false otherwise.
                     if (_formKey.currentState!.validate()) {
                       String response = await _auth.sigInWithEmail(
-                        context,
-                        _emailController.value.text,
-                        _passwordController.value.text,
-                      );
-
+                          context,
+                          _emailController.value.text,
+                          _passwordController.value.text,
+                          widget.role);
                       print(response);
                       if (response != "None") {
                         setState(() {
@@ -162,14 +162,13 @@ class _SignInScreenState extends State<SignInScreen> {
                     }),
                   ),
                   onPressed: () async {
-                    UserCredential? user;
-                    try {
-                      UserCredential? user = await _auth.signInWithGoogle();
-                      if (user != null) {
-                        _auth.storeGoogleUserInCollection(user);
-                        Navigator.of(context).pushReplacementNamed("/home");
-                      }
-                    } catch (e) {
+                    String response =
+                        await _auth.signInSignUpWithGoogle(widget.role);
+                    print("response" + response);
+
+                    if (response == "None") {
+                      Navigator.of(context).pushReplacementNamed("/home");
+                    } else {
                       setState(() {
                         _success = false;
                         _failureReason =
@@ -177,7 +176,6 @@ class _SignInScreenState extends State<SignInScreen> {
                       });
                     }
                   },
-                  // UPDATED
                   child: const Text('Google Signin'),
                 ),
                 Padding(

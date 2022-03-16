@@ -15,6 +15,7 @@ class AuthService {
     );
   }
 
+  static String currentUserRole = "NONE";
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestoredb = FirebaseFirestore.instance;
 
@@ -25,7 +26,8 @@ class AuthService {
     return _auth.authStateChanges();
   }
 
-  void storeGoogleUserInCollection(UserCredential user) {
+  Future<String> storeGoogleUserInCollection(
+      UserCredential user, String role) async {
     String timestamp = DateTime.now().toString();
     var uuid = Uuid();
     var v1 = uuid.v1();
@@ -37,22 +39,39 @@ class AuthService {
       Map<String, String> userObject = {
         "firstName": user.additionalUserInfo?.profile?["given_name"],
         "lastName": user.additionalUserInfo?.profile?["family_name"],
-        "role": "?",
+        "role": role,
         "timestamp": timestamp,
         "userId": user.user?.uid ?? v1,
       };
 
+      currentUserRole = role;
+
       documentReference
           .set(userObject)
           .whenComplete(() => print("Data stored successfully"));
+
+      return "SUCCESS";
+    } else {
+      var data = await _firestoredb
+          .collection("users")
+          .doc(_auth.currentUser?.uid)
+          .get();
+
+      currentUserRole = data.data()!["role"];
+
+      if (currentUserRole != role) {
+        return "FAILURE";
+      }
+
+      return "SUCCESS";
     }
-    return;
   }
 
   // have to work on this function to get role of the current logged in user
   Future<Map> getFullName() async {
+    print(currentUserRole);
     var data = await _firestoredb
-        .collection('drivers')
+        .collection("users")
         .doc(_auth.currentUser?.uid)
         .get();
 
@@ -62,36 +81,49 @@ class AuthService {
     };
   }
 
-  Future<UserCredential> signInWithGoogle() async {
-    if (kIsWeb) {
-      // Create a new provider
-      GoogleAuthProvider googleProvider = GoogleAuthProvider();
-      googleProvider
-          .addScope('https://www.googleapis.com/auth/contacts.readonly');
-      googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
+  Future<String> signInSignUpWithGoogle(String role) async {
+    try {
+      if (kIsWeb) {
+        GoogleAuthProvider googleProvider = GoogleAuthProvider();
+        googleProvider
+            .addScope('https://www.googleapis.com/auth/contacts.readonly');
+        googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
+        UserCredential user = await _auth.signInWithPopup(googleProvider);
+        String response = await storeGoogleUserInCollection(user, role);
+        if (response == "FAILURE") {
+          _failureReason = 'Please login as ${role}';
+        } else {
+          _failureReason = "None";
+        }
+        return _failureReason;
+      } else {
+        final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+        final GoogleSignInAuthentication? googleAuth =
+            await googleUser?.authentication;
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth?.accessToken,
+          idToken: googleAuth?.idToken,
+        );
 
-      // Once signed in, return the UserCredential
-      return await _auth.signInWithPopup(googleProvider);
-    } else {
-      // Trigger the authentication flow
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-      // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
-
-      // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-
-      // Once signed in, return the UserCredential
-      return await _auth.signInWithCredential(credential);
+        // Once signed in, return the UserCredential
+        UserCredential user = await _auth.signInWithCredential(credential);
+        print(user);
+        String response = await storeGoogleUserInCollection(user, role);
+        if (response == "FAILURE") {
+          _failureReason = 'Please login as ${role}';
+        } else {
+          _failureReason = "None";
+        }
+        return _failureReason;
+      }
+    } catch (e) {
+      _failureReason = e.toString();
+      return _failureReason;
     }
   }
 
   void signOutWithGoogle() async {
+    currentUserRole = "NONE";
     await googleSignIn.disconnect();
   }
 
@@ -104,24 +136,11 @@ class AuthService {
           .createUserWithEmailAndPassword(email: email, password: password);
 
       String timestamp = DateTime.now().toString();
-      DocumentReference documentReference;
+      DocumentReference documentReference =
+          _firestoredb.collection("users").doc(userCredential.user?.uid);
       var uuid = Uuid();
       var v1 = uuid.v1();
-
-      if (role == "driver") {
-        documentReference = _firestoredb
-            .collection("drivers")
-            .doc(userCredential.user?.uid ?? v1);
-      } else if (role == "rider") {
-        documentReference = _firestoredb
-            .collection("riders")
-            .doc(userCredential.user?.uid ?? v1);
-      } else {
-        // this case can handle situations where role is something else like "None"
-        documentReference = _firestoredb
-            .collection("users")
-            .doc(userCredential.user?.uid ?? v1);
-      }
+      currentUserRole = role;
 
       Map<String, String> todoList = {
         "firstName": firstName,
@@ -156,14 +175,27 @@ class AuthService {
   }
 
   Future sigInWithEmail(
-      BuildContext context, String email, String password) async {
+      BuildContext context, String email, String password, String role) async {
     print("login");
 
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      Navigator.of(context).pushReplacementNamed("/home");
-      _failureReason = "None";
+
+      var data = await _firestoredb
+          .collection("users")
+          .doc(_auth.currentUser?.uid)
+          .get();
+
+      currentUserRole = data.data()!["role"];
+      print("currentUserRole" + currentUserRole);
+      print("role" + role);
+      if (currentUserRole != role) {
+        _failureReason = 'Please sign in as a ${currentUserRole}';
+      } else {
+        Navigator.of(context).pushReplacementNamed("/home");
+        _failureReason = "None";
+      }
       return _failureReason;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -193,6 +225,7 @@ class AuthService {
     if (_auth.currentUser != null) {
       try {
         await _auth.signOut();
+        currentUserRole = "NONE";
         return "SUCCESS";
       } catch (e) {
         return "FAILED";

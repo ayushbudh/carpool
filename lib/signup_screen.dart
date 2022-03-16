@@ -206,14 +206,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }),
                   ),
                   onPressed: () async {
-                    UserCredential? user;
-                    try {
-                      UserCredential? user = await _auth.signInWithGoogle();
-                      if (user != null) {
-                        _auth.storeGoogleUserInCollection(user);
-                        Navigator.of(context).pushReplacementNamed("/home");
-                      }
-                    } catch (e) {
+                    String response =
+                        await _auth.signInSignUpWithGoogle(widget.role);
+                    print("response" + response);
+                    if (response == "None") {
+                      Navigator.of(context).pushReplacementNamed("/home");
+                    } else {
                       setState(() {
                         _success = false;
                         _failureReason =
