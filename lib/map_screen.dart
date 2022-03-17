@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'package:carpool_app/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:carpool_app/location_services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MapScreen extends StatefulWidget {
   final String origin;
@@ -22,6 +24,7 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   String currentWidgetState = "ROUTESCREEN";
+  final AuthService _auth = AuthService();
 
   var directions;
   late BitmapDescriptor customIcon;
@@ -180,27 +183,60 @@ class _MapScreenState extends State<MapScreen> {
                     ],
                   ),
                 ),
-                DecideWidget(
+                decideWidget(
                     currentWidgetState, directions, widthSize, heightSize)
               ],
             ));
   }
 
-  Widget DecideWidget(String currentWidgetState, var directions,
+  Widget decideWidget(String currentWidgetState, var directions,
       double widthSize, double heightSize) {
     if (currentWidgetState == "ROUTESCREEN") {
       return MapRouteScreen();
-    } else if (currentWidgetState == "DRIVESCREEN") {
-      return MapDriveScreen(heightSize);
-    } else {
-      return MapNewRiderScreen(heightSize);
     }
+    return decideDriveNewRiderScreenWidget(heightSize);
   }
 
-  Widget MapNewRiderScreen(double heightSize) {
+  Widget decideDriveNewRiderScreenWidget(double heightSize) {
+    return Expanded(
+      child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: _auth.newRiderRequest(),
+        builder: (BuildContext context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          Widget child;
+          if (snapshot.hasError) {
+            child = const Icon(
+              Icons.error_outline,
+              color: Colors.red,
+              size: 60,
+            );
+          } else {
+            if (snapshot.data?.docs.isEmpty ?? true) {
+              child = MapDriveScreen(heightSize);
+            } else {
+              // child = Text('${snapshot.data!.docs.single.data()}');
+              child = MapNewRiderScreen(
+                  heightSize, snapshot.data?.docs.first.data());
+            }
+          }
+
+          return Container(
+              height: heightSize * 0.20,
+              decoration: BoxDecoration(
+                  color: const Color(0xff199EFF),
+                  borderRadius: BorderRadius.all(Radius.circular(25))),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [child]));
+        },
+      ),
+    );
+  }
+
+  Widget MapNewRiderScreen(double heightSize, var data) {
     return Expanded(
         child: Container(
-      height: heightSize * 0.20,
+      height: heightSize * 0.30,
       decoration: BoxDecoration(
           color: const Color(0xff199EFF),
           borderRadius: BorderRadius.all(Radius.circular(25))),
@@ -224,14 +260,14 @@ class _MapScreenState extends State<MapScreen> {
                   ),
                   SizedBox(height: 5),
                   Text(
-                    'Troy Sivan',
+                    '${data["riderName"]}',
                     style: TextStyle(
                         fontSize: 20,
                         color: Colors.white,
                         decoration: TextDecoration.none,
                         fontWeight: FontWeight.bold),
                   ),
-                  Text('1.2 mi',
+                  Text('${data["distance"]}',
                       style: TextStyle(
                           fontSize: 17,
                           color: Colors.white,
@@ -342,19 +378,19 @@ class _MapScreenState extends State<MapScreen> {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 40, left: 20),
-                child: Container(
-                  color: Colors.white,
-                  child: Image.network(
-                      'https://developers.google.com/maps/documentation/images/powered_by_google_on_white.png'),
-                ),
-              )
-            ],
-          )
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.start,
+          //   children: [
+          //     Padding(
+          //       padding: const EdgeInsets.only(top: 40, left: 20),
+          //       child: Container(
+          //         color: Colors.white,
+          //         child: Image.network(
+          //             'https://developers.google.com/maps/documentation/images/powered_by_google_on_white.png'),
+          //       ),
+          //     )
+          //   ],
+          // )
         ],
       ),
     ));
@@ -363,7 +399,7 @@ class _MapScreenState extends State<MapScreen> {
   Widget MapDriveScreen(double heightSize) {
     return Expanded(
         child: Container(
-      height: heightSize * 0.20,
+      height: heightSize * 0.30,
       decoration: BoxDecoration(
           color: const Color(0xff199EFF),
           borderRadius: BorderRadius.all(Radius.circular(25))),
@@ -467,19 +503,19 @@ class _MapScreenState extends State<MapScreen> {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Container(
-                  color: Colors.white,
-                  child: Image.network(
-                      'https://developers.google.com/maps/documentation/images/powered_by_google_on_white.png'),
-                ),
-              )
-            ],
-          )
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     Padding(
+          //       padding: const EdgeInsets.only(top: 20),
+          //       child: Container(
+          //         color: Colors.white,
+          //         child: Image.network(
+          //             'https://developers.google.com/maps/documentation/images/powered_by_google_on_white.png'),
+          //       ),
+          //     )
+          //   ],
+          // )
         ],
       ),
     ));

@@ -122,6 +122,14 @@ class AuthService {
     }
   }
 
+  Stream<QuerySnapshot<Map<String, dynamic>>> newRiderRequest() {
+    return _firestoredb
+        .collection("users")
+        .doc(_auth.currentUser!.uid)
+        .collection("requests")
+        .snapshots();
+  }
+
   void signOutWithGoogle() async {
     currentUserRole = "NONE";
     await googleSignIn.disconnect();
