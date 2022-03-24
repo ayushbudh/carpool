@@ -12,6 +12,6 @@ https://www.figma.com/file/sYpzzz2ShWBI7K8lAojgAe/Car-Pooling?node-id=0%3A1
 
 ## Flow Chart
 
-<img width="958" alt="Screen Shot 2022-03-11 at 2 42 52 AM" src="https://user-images.githubusercontent.com/56787472/157823991-202bddbc-0569-4325-8a55-7bed3fa8c11d.png">
+<img width="664" alt="Screen Shot 2022-03-24 at 2 05 09 AM" src="https://user-images.githubusercontent.com/56787472/159852752-83f22702-456d-415b-9454-d6c4d594d27d.png">
 
 
