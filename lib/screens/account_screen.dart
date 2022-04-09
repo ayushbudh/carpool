@@ -1,5 +1,8 @@
-import 'package:carpool_app/auth.dart';
+import 'package:carpool_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:carpool_app/services/map_screen_provider.dart';
+import 'package:provider/provider.dart';
 
 class AccountScreen extends StatefulWidget {
   AccountScreen({Key? key}) : super(key: key);
@@ -33,7 +36,8 @@ class AccountScreenState extends State<AccountScreen> {
     );
 
     return Container(
-      child: Center(child: Text('Coming Soon!')),
+      child: Center(
+          child: Text('${context.watch<MapScreenProvider>().getMapHeight}')),
     );
   }
 }

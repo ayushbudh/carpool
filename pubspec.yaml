@@ -27,6 +27,7 @@ dependencies:
   cloud_firestore: ^3.1.8
   google_sign_in: ^5.2.4
   cloud_firestore_web: ^2.6.10
+  progress_indicators: ^1.0.0
 
 dev_dependencies:
   flutter_test:

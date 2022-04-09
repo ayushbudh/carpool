@@ -1,4 +1,4 @@
-import 'package:carpool_app/auth_screen.dart';
+import 'package:carpool_app/screens/auth_screen.dart';
 import 'package:flutter/material.dart';
 
 class LaunchScreenOptions extends StatelessWidget {

@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 class LocationService {
-  final String key = 'API-Key';
+  final String key = 'APIKEY';
 
   // currently not being used, this function is just for reference
   Future<Map<String, dynamic>> getPlaceID(String input) async {
@@ -50,5 +50,19 @@ class LocationService {
     };
 
     return results;
+  }
+
+  Future<String>? getDistanceInMiles(var directions) async {
+    if (directions['distanceInMiles'] == "") {
+      return "0 mi";
+    }
+    return directions['distanceInMiles'];
+  }
+
+  Future<String>? getDurationToReachDestination(var directions) async {
+    if (directions['durationToReachDestination'] == "") {
+      return "0 mi";
+    }
+    return directions['durationToReachDestination'];
   }
 }

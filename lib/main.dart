@@ -1,20 +1,34 @@
-import 'package:carpool_app/auth.dart';
+import 'package:carpool_app/screens/map_screen.dart';
+import 'package:carpool_app/services/auth_service.dart';
+import 'package:carpool_app/services/map_screen_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:carpool_app/drive_screen.dart';
+import 'package:carpool_app/screens/drive_screen.dart';
 import 'package:provider/provider.dart';
-import 'base_screen.dart';
+import 'screens/base_screen.dart';
 import 'firebase_options.dart';
-import 'launch_screen_options.dart';
-import 'package:carpool_app/auth_screen.dart';
-import 'launch_screen.dart';
+import 'screens/launch_screen_options.dart';
+import 'package:carpool_app/screens/auth_screen.dart';
+import 'screens/launch_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => MapScreenProvider(),
+          child: MyApp(),
+        ),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

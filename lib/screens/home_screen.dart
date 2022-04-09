@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'auth.dart';
+import 'package:carpool_app/services/auth_service.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -170,7 +169,7 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ],
-            ))
+            )),
       ],
     );
   }

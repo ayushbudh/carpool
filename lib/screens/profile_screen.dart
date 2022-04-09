@@ -1,4 +1,4 @@
-import 'package:carpool_app/auth.dart';
+import 'package:carpool_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {

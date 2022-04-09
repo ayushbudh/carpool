@@ -1,11 +1,12 @@
-import 'package:carpool_app/map_screen.dart';
-import 'package:carpool_app/search_autocomplete_screen.dart';
+import 'package:carpool_app/screens/map_screen.dart';
+import 'package:carpool_app/screens/search_autocomplete_screen.dart';
 import 'package:flutter/material.dart';
 import 'map_screen.dart';
+import 'package:provider/provider.dart';
 
 class DriveScreen extends StatefulWidget {
   DriveScreen();
-
+  
   @override
   DriveScreenState createState() => DriveScreenState();
 }
@@ -14,6 +15,7 @@ class DriveScreenState extends State<DriveScreen> {
   final TextEditingController _pickup = TextEditingController();
   final TextEditingController _destination = TextEditingController();
 
+  
   @override
   Widget build(BuildContext context) {
     final widthSize = MediaQuery.of(context).size.width;
