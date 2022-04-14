@@ -1,10 +1,13 @@
-import 'package:carpool_app/services/auth_service.dart';
+import 'package:carpool_app/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:carpool_app/services/map_screen_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:carpool_app/services/map_metrics_service.dart';
 
-Widget MapNewRiderWidget(double heightSize, var data, var directions) {
+Widget MapNewRiderWidget(
+    BuildContext context, double heightSize, var data, var directions) {
+  final FirebaseService _auth = FirebaseService();
+
   return Expanded(
       child: Container(
     height: heightSize * 0.30,
@@ -62,7 +65,10 @@ Widget MapNewRiderWidget(double heightSize, var data, var directions) {
                                 : Colors.green;
                           }),
                         ),
-                        onPressed: () {},
+                        onPressed: () async {
+                          bool response =
+                              await _auth.changeRideRequestStatus("ACCEPTED");
+                        },
                         child: Icon(Icons.check_box)),
                     Padding(padding: EdgeInsets.all(3)),
                     ElevatedButton(
@@ -80,7 +86,10 @@ Widget MapNewRiderWidget(double heightSize, var data, var directions) {
                                 : Colors.red;
                           }),
                         ),
-                        onPressed: () {},
+                        onPressed: () async {
+                          bool response =
+                              await _auth.changeRideRequestStatus("REJECTED");
+                        },
                         child: Icon(Icons.cancel_presentation_sharp))
                   ],
                 )

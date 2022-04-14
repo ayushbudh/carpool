@@ -1,4 +1,4 @@
-import 'package:carpool_app/services/auth_service.dart';
+import 'package:carpool_app/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:carpool_app/services/map_screen_provider.dart';
@@ -11,7 +11,7 @@ class AccountScreen extends StatefulWidget {
 }
 
 class AccountScreenState extends State<AccountScreen> {
-  final AuthService _auth = AuthService();
+  final FirebaseService _auth = FirebaseService();
   late TextEditingController _emailController;
 
   @override
@@ -24,20 +24,48 @@ class AccountScreenState extends State<AccountScreen> {
   Widget build(BuildContext context) {
     final widthSize = MediaQuery.of(context).size.width;
     final heightSize = MediaQuery.of(context).size.height;
-    final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
-      onPrimary: Colors.white,
-      primary: const Color(0xffFF1522),
-      minimumSize: Size(widthSize * 0.20, heightSize * 0.01),
-      padding: EdgeInsets.symmetric(
-          horizontal: widthSize * 0.07, vertical: heightSize * 0.01),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(30)),
-      ),
-    );
 
-    return Container(
-      child: Center(
-          child: Text('${context.watch<MapScreenProvider>().getMapHeight}')),
-    );
+    final List<String> entries = <String>[
+      'Account',
+      'Card Management',
+      'Security'
+    ];
+    final List<int> colorCodes = <int>[600, 500, 100];
+    return Column(children: [
+      Row(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(
+                left: widthSize * 0.04,
+                top: heightSize * 0.03,
+                bottom: heightSize * 0.03),
+            child: Text(
+              "Account",
+              style: TextStyle(fontSize: heightSize * 0.03),
+            ),
+          )
+        ],
+      ),
+      Container(
+          margin:
+              EdgeInsets.only(left: widthSize * 0.02, right: widthSize * 0.02),
+          height: heightSize * 0.30,
+          child: ListView.separated(
+            padding: const EdgeInsets.all(8),
+            itemCount: entries.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                height: 50,
+                color: Color.fromARGB(255, 226, 224, 224),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text('${entries[index]}'),
+                ),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) =>
+                const Divider(),
+          ))
+    ]);
   }
 }

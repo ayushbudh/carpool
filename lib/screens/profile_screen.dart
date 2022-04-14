@@ -1,4 +1,4 @@
-import 'package:carpool_app/services/auth_service.dart';
+import 'package:carpool_app/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -8,7 +8,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class ProfileScreenState extends State<ProfileScreen> {
-  final AuthService _auth = AuthService();
+  final FirebaseService _auth = FirebaseService();
   late TextEditingController _emailController;
 
   @override

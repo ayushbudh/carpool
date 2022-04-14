@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:carpool_app/services/auth_service.dart';
+import 'package:carpool_app/services/firebase_service.dart';
 
 class SignInScreen extends StatefulWidget {
   final String role;
@@ -18,7 +18,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   bool _success = true;
   String _failureReason = '';
-  final AuthService _auth = AuthService();
+  final FirebaseService _auth = FirebaseService();
 
   @override
   Widget build(BuildContext context) {

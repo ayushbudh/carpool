@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:progress_indicators/progress_indicators.dart';
 import 'package:carpool_app/services/map_screen_provider.dart';
 import 'package:provider/provider.dart';
 
-Widget MapNewRiderPendingRequestWidget(
-    BuildContext context, double heightSize) {
+Widget MapNewRiderRejectedRequestWidget(BuildContext context, double heightSize) {
   return Expanded(
       child: Container(
     height: heightSize * 0.25,
@@ -14,13 +12,8 @@ Widget MapNewRiderPendingRequestWidget(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            JumpingDotsProgressIndicator(fontSize: 50.0, color: Colors.white),
-          ],
-        ),
-        Text("Looking for drivers...",
+        Icon(Icons.cancel_presentation),
+        Text("Requested Rejected! Please try again",
             style: TextStyle(
                 fontSize: 22,
                 color: Colors.white,
@@ -47,7 +40,7 @@ Widget MapNewRiderPendingRequestWidget(
                 .read<MapScreenProvider>()
                 .setCurrentWidgetState("ROUTESCREEN");
           },
-          child: Text("Cancel Ride"),
+          child: Text("Try again"),
         ),
       ],
     ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:carpool_app/services/auth_service.dart';
+import 'package:carpool_app/services/firebase_service.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
-  final AuthService _auth = AuthService();
+  final FirebaseService _auth = FirebaseService();
 
   @override
   Widget build(BuildContext context) {

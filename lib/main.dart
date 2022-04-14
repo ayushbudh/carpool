@@ -1,5 +1,4 @@
-import 'package:carpool_app/screens/map_screen.dart';
-import 'package:carpool_app/services/auth_service.dart';
+import 'package:carpool_app/services/firebase_service.dart';
 import 'package:carpool_app/services/map_screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:carpool_app/screens/drive_screen.dart';
@@ -10,7 +9,6 @@ import 'screens/launch_screen_options.dart';
 import 'package:carpool_app/screens/auth_screen.dart';
 import 'screens/launch_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,7 +41,7 @@ class MyApp extends StatelessWidget {
         '/launchscreenoptions': (context) => LaunchScreenOptions(),
         '/': (context) => StreamProvider.value(
               initialData: null,
-              value: AuthService().user,
+              value: FirebaseService().user,
               child: LaunchScreen(),
             ),
         '/auth': (context) => AuthScreen("None"),

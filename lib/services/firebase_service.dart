@@ -8,7 +8,7 @@ import '../firebase_options.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:async';
 
-class AuthService {
+class FirebaseService {
   void initialization() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -132,6 +132,107 @@ class AuthService {
         .doc(_auth.currentUser!.uid)
         .collection("requests")
         .snapshots();
+  }
+
+  void changeIsDrivingStatus(bool status) async {
+    await _firestoredb
+        .collection("users")
+        .doc(_auth.currentUser!.uid)
+        .update({"isDriving": status});
+  }
+
+  Future<String> newDriveRequest() async {
+    // created index for this using role and userId based on ascending order
+
+    var docQuery = await _firestoredb
+        .collection("users")
+        .where("role", isEqualTo: 'driver')
+        .where("userId", isNotEqualTo: _auth.currentUser!.uid)
+        .where("isDriving", isEqualTo: true)
+        .get();
+
+    CollectionReference riderRequestcollectionReference = await _firestoredb
+        .collection("users")
+        .doc(_auth.currentUser!.uid)
+        .collection("requests");
+
+    if (docQuery.docs.isEmpty) {
+      riderRequestcollectionReference
+          .doc("DUNAVAILABLE")
+          .set({"status": "DUNAVAILABLE"});
+      return "DUNAVAILABLE";
+    } else {
+      var doc = await riderRequestcollectionReference.doc("DUNAVAILABLE").get();
+      if (doc.exists) {
+        riderRequestcollectionReference
+            .doc("DUNAVAILABLE")
+            .delete()
+            .then((value) => print("Delete DUNAVAILABLE document"))
+            .catchError(
+                (error) => print("Failed to delete DUNAVAILABLE document"));
+      }
+    }
+
+    DocumentReference documentReference = docQuery.docs[0].reference;
+    String driverDocumentID = documentReference.id;
+
+    CollectionReference driverRequestsCollection =
+        documentReference.collection("requests");
+    String currentTime = DateTime.now().toString();
+
+    try {
+      await driverRequestsCollection.doc(_auth.currentUser!.uid).set({
+        "timeStamp": currentTime,
+        "status": "PENDING",
+        "riderId": _auth.currentUser!.uid
+      });
+
+      riderRequestcollectionReference.doc(driverDocumentID).set({
+        "timeStamp": currentTime,
+        "status": "PENDING",
+        "driverId": driverDocumentID
+      });
+
+      return "PENDING";
+    } catch (err) {
+      await driverRequestsCollection.doc(_auth.currentUser!.uid).set({
+        "timeStamp": currentTime,
+        "status": "ERROR",
+        "riderId": _auth.currentUser!.uid
+      });
+
+      riderRequestcollectionReference.doc(driverDocumentID).set({
+        "timeStamp": currentTime,
+        "status": "ERROR",
+        "driverId": driverDocumentID
+      });
+
+      return "ERROR";
+    }
+  }
+
+  Future<bool> changeRideRequestStatus(String status) async {
+    try {
+      var doc = await _firestoredb
+          .collection("users")
+          .doc(_auth.currentUser!.uid)
+          .collection("requests")
+          .get();
+
+      String riderDocumentId = doc.docs[0].reference.id;
+      await doc.docs[0].reference.update({"status": status});
+
+      await _firestoredb
+          .collection("users")
+          .doc(riderDocumentId)
+          .collection("requests")
+          .doc(_auth.currentUser!.uid)
+          .update({"status": status});
+
+      return true;
+    } catch (err) {
+      return false;
+    }
   }
 
   void signOutWithGoogle() async {

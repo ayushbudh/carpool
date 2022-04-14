@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:carpool_app/screens/driver_screens/map_new_rider_widget.dart';
-import 'package:carpool_app/services/auth_service.dart';
+import 'package:carpool_app/screens/rider_screens/map_new_rider_dunavailable_request_widget.dart';
+import 'package:carpool_app/screens/rider_screens/map_new_rider_failed_request_widget.dart';
+import 'package:carpool_app/screens/rider_screens/map_new_rider_rejected_request_widget.dart';
+import 'package:carpool_app/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:carpool_app/services/location_services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -12,7 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:carpool_app/screens/driver_screens/map_drive_widget.dart';
 import 'package:carpool_app/services/map_metrics_service.dart';
 import 'driver_screens/map_drive_widget.dart';
-import 'rider_screens/map_new_rider_pending_request_widget.dart';
+import 'rider_screens/map_new_rider_create_request_widget.dart';
 
 class MapScreen extends StatefulWidget {
   final String origin;
@@ -30,7 +33,7 @@ class MapScreenState extends State<MapScreen> {
     _getRoute(widget.origin, widget.destination);
   }
 
-  final AuthService _auth = AuthService();
+  final FirebaseService _auth = FirebaseService();
 
   var directions;
   late BitmapDescriptor customIcon;
@@ -197,28 +200,14 @@ class MapScreenState extends State<MapScreen> {
       return MapRouteScreen();
     } else if (currentWidgetState == "DRIVESCREEN") {
       // for drivers
-      return decideDriveNewRiderScreenWidget(heightSize);
+      return decideNewRideDriverScreenWidget(heightSize);
     } else {
       // for riders: currentWidgetState == RIDESCEEN
-      return decideNewRideDriverScreenWidget(heightSize);
+      return decideFindRideRiderScreenWidget(heightSize);
     }
   }
 
-  Widget decideNewRideDriverScreenWidget(double heightSize) {
-    Widget child;
-    child = MapNewRiderPendingRequestWidget(context, heightSize);
-    return Expanded(
-        child: Container(
-            height: heightSize * 0.20,
-            decoration: BoxDecoration(
-                color: const Color(0xff199EFF),
-                borderRadius: BorderRadius.all(Radius.circular(25))),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [child])));
-  }
-
-  Widget decideDriveNewRiderScreenWidget(double heightSize) {
+  Widget decideFindRideRiderScreenWidget(double heightSize) {
     return Expanded(
       child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: _auth.newRiderRequest(),
@@ -231,14 +220,107 @@ class MapScreenState extends State<MapScreen> {
               color: Colors.red,
               size: 60,
             );
-          } else {
+          } else if (snapshot.hasData) {
             if (snapshot.data?.docs.isEmpty ?? true) {
-              child = MapDriveWidget(context, directions, heightSize);
+              child = MapDriveWidget(_auth, context, directions, heightSize);
             } else {
               // child = Text('${snapshot.data!.docs.single.data()}');
-              child = MapNewRiderWidget(
-                  heightSize, snapshot.data?.docs.first.data(), directions);
+              String status = snapshot.data?.docs.first.data()["status"];
+              if (status == "CREATE" || status == "PENDING") {
+                // STATUS: CREATE OR PENDING
+                child =
+                    MapNewRiderCreateRequestWidget(context, heightSize, status);
+              } else if (status == "ACCEPTED") {
+                child = MapDriveWidget(_auth, context, directions, heightSize);
+              } else if (status == "DUNAVAILABLE") {
+                // Status: DUNAVAILABLE - no drivers are currently avaialable
+                child =
+                    MapNewRiderDunavailableRequestWidget(context, heightSize);
+              } else if (status == "REJECTED") {
+                child = MapNewRiderRejectedRequestWidget(context, heightSize);
+              } else {
+                // Status: FAILED or Error - something went wrong
+                child = MapNewRiderFailedRequestWidget(context, heightSize);
+              }
             }
+          } else {
+            child = Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  "Loading...",
+                  style: TextStyle(
+                      fontSize: 22,
+                      color: Colors.white,
+                      decoration: TextDecoration.none,
+                      fontWeight: FontWeight.bold),
+                ),
+                CircularProgressIndicator(
+                  color: Colors.black,
+                )
+              ],
+            );
+          }
+
+          return Container(
+              height: heightSize * 0.20,
+              decoration: BoxDecoration(
+                  color: const Color(0xff199EFF),
+                  borderRadius: BorderRadius.all(Radius.circular(25))),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [child]));
+        },
+      ),
+    );
+  }
+
+  Widget decideNewRideDriverScreenWidget(double heightSize) {
+    return Expanded(
+      child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: _auth.newRiderRequest(),
+        builder: (BuildContext context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          Widget child;
+          if (snapshot.hasError) {
+            child = const Icon(
+              Icons.error_outline,
+              color: Colors.red,
+              size: 60,
+            );
+          } else if (snapshot.hasData) {
+            if (snapshot.data?.docs.isEmpty ?? true) {
+              child = MapDriveWidget(_auth, context, directions, heightSize);
+            } else {
+              // child = Text('${snapshot.data!.docs.single.data()}');
+              String status = snapshot.data?.docs.first.data()["status"];
+              if (status == 'PENDING' || status == 'CREATE') {
+                child = MapNewRiderWidget(context, heightSize,
+                    snapshot.data?.docs.first.data(), directions);
+              } else if (status == 'ACCEPTED') {
+                child = MapDriveWidget(_auth, context, directions, heightSize);
+              } else {
+                // requestStatus: REJECTED or some error
+                child = MapDriveWidget(_auth, context, directions, heightSize);
+              }
+            }
+          } else {
+            child = Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  "Loading...",
+                  style: TextStyle(
+                      fontSize: 22,
+                      color: Colors.white,
+                      decoration: TextDecoration.none,
+                      fontWeight: FontWeight.bold),
+                ),
+                CircularProgressIndicator(
+                  color: Colors.black,
+                )
+              ],
+            );
           }
 
           return Container(
@@ -334,9 +416,10 @@ class MapScreenState extends State<MapScreen> {
                   ),
                   SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       context.read<MapScreenProvider>().setMapHeight(0.75);
                       if (_auth.getCurrentUserRole() == 'driver') {
+                        _auth.changeIsDrivingStatus(true);
                         context
                             .read<MapScreenProvider>()
                             .setCurrentWidgetState("DRIVESCREEN");
@@ -344,6 +427,8 @@ class MapScreenState extends State<MapScreen> {
                         context
                             .read<MapScreenProvider>()
                             .setCurrentWidgetState("RIDESCEEN");
+
+                        await _auth.newDriveRequest();
                       }
                     },
                     child: _auth.getCurrentUserRole() == 'driver'
