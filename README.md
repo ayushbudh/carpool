@@ -8,7 +8,8 @@ https://trello.com/b/o7j75SKg/carpool
 
 ## App Prototype
 
-<img width="929" alt="Screen Shot 2022-04-14 at 12 31 31 AM" src="https://user-images.githubusercontent.com/56787472/163314268-63af2164-ec68-4eab-98a3-7b5aad133746.png">
+<img width="929" alt="Screen Shot 2022-04-14 at 12 38 23 AM" src="https://user-images.githubusercontent.com/56787472/163314649-e02c9d56-7374-4ca9-88d7-1da555951573.png">
+
 
 https://www.figma.com/file/sYpzzz2ShWBI7K8lAojgAe/Car-Pooling?node-id=0%3A1
 
