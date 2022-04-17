@@ -1,8 +1,7 @@
-import 'package:carpool_app/map_screen.dart';
-import 'package:carpool_app/search_autocomplete_screen.dart';
+import 'package:carpool_app/screens/map_screen.dart';
+import 'package:carpool_app/screens/search_autocomplete_screen.dart';
 import 'package:flutter/material.dart';
-import 'location_services.dart';
-import 'map_screen.dart' as _MapScreenState;
+import 'map_screen.dart';
 
 class DriveScreen extends StatefulWidget {
   DriveScreen();
@@ -73,8 +72,6 @@ class DriveScreenState extends State<DriveScreen> {
                                 SearchAutoCompleteScreen(_pickup)));
                       },
                       decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: EdgeInsets.all(heightSize * 0.03),
                         border: OutlineInputBorder(),
                         labelText: 'Origin',
                       ),
@@ -108,8 +105,6 @@ class DriveScreenState extends State<DriveScreen> {
                                 SearchAutoCompleteScreen(_destination)));
                       },
                       decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: EdgeInsets.all(heightSize * 0.03),
                         border: OutlineInputBorder(),
                         labelText: 'Destination',
                       ),

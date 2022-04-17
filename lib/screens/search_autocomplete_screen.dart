@@ -1,5 +1,5 @@
-import 'package:carpool_app/drive_screen.dart';
-import 'package:carpool_app/location_services.dart';
+import 'package:carpool_app/screens/drive_screen.dart';
+import 'package:carpool_app/services/location_services.dart';
 import 'package:flutter/material.dart';
 
 class SearchAutoCompleteScreen extends StatefulWidget {

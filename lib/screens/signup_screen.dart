@@ -1,6 +1,6 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
-import 'package:carpool_app/auth.dart';
+import 'package:carpool_app/services/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -17,7 +17,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _lastName = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final AuthService _auth = AuthService();
+  final FirebaseService _auth = FirebaseService();
 
   bool _success = true;
   String _failureReason = '';
@@ -206,14 +206,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }),
                   ),
                   onPressed: () async {
-                    UserCredential? user;
-                    try {
-                      UserCredential? user = await _auth.signInWithGoogle();
-                      if (user != null) {
-                        _auth.storeGoogleUserInCollection(user);
-                        Navigator.of(context).pushReplacementNamed("/home");
-                      }
-                    } catch (e) {
+                    String response =
+                        await _auth.signInSignUpWithGoogle(widget.role);
+                    print("response" + response);
+                    if (response == "None") {
+                      Navigator.of(context).pushReplacementNamed("/home");
+                    } else {
                       setState(() {
                         _success = false;
                         _failureReason =

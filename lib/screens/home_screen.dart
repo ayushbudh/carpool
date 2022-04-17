@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
-import 'auth.dart';
+import 'package:carpool_app/services/firebase_service.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
-  final AuthService _auth = AuthService();
+  final FirebaseService _auth = FirebaseService();
 
   @override
   Widget build(BuildContext context) {
@@ -64,17 +63,22 @@ class HomeScreen extends StatelessWidget {
               ];
             } else if (snapshot.hasError) {
               children = <Widget>[
-                const Icon(
-                  Icons.error_outline,
-                  color: Colors.red,
-                  size: 40,
+                Padding(
+                  padding: EdgeInsets.only(top: heightSize * 0.05),
+                  child: Icon(Icons.error_outline,
+                      color: Colors.red, size: heightSize * 0.06),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 15),
+                  padding: EdgeInsets.only(
+                      top: heightSize * 0.02,
+                      bottom: 15,
+                      left: widthSize * 0.02,
+                      right: widthSize * 0.02),
                   child: Text(
-                      'We are having some problem getting your details. Please try again later.',
-                      style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+                      'We are having some problem getting your details. \n Please try again later.',
+                      style: TextStyle(
+                          fontSize: widthSize * 0.035,
+                          fontWeight: FontWeight.bold)),
                 )
               ];
             } else {
@@ -132,40 +136,11 @@ class HomeScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Icon(Icons.account_circle,
-                              size: heightSize * 0.065),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            buildText('Rebeka ratry',
-                                TextStyle(fontSize: widthSize * 0.04)),
-                            Padding(padding: const EdgeInsets.all(3)),
-                            buildText('22 Jan 2020',
-                                TextStyle(fontSize: widthSize * 0.04)),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        buildText('+\$1,190.00',
-                            TextStyle(fontSize: widthSize * 0.04)),
-                        Padding(padding: const EdgeInsets.all(3)),
-                        buildText(
-                            '03:25am', TextStyle(fontSize: widthSize * 0.04)),
-                      ],
-                    )
+                    Text('No Activity'),
                   ],
                 ),
               ],
-            ))
+            )),
       ],
     );
   }
@@ -184,6 +159,7 @@ class AccountCard extends StatelessWidget {
   final double heightSize;
   final double widthSize;
   AccountCard(this.fullName, this.heightSize, this.widthSize);
+
   Widget buildText(text, style) {
     return Container(
       child: FittedBox(
@@ -194,62 +170,69 @@ class AccountCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: heightSize * 0.22,
-      child: Padding(
-        padding: const EdgeInsets.all(11.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                buildText(
-                  'Ebl titanium account',
-                  TextStyle(color: Colors.white, fontSize: widthSize * 0.03),
-                ),
-                buildText(this.fullName,
-                    TextStyle(color: Colors.white, fontSize: widthSize * 0.03)),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    buildText(
-                      '\$6,190.00',
+    return InkWell(
+      child: Container(
+        height: heightSize * 0.22,
+        child: Padding(
+          padding: const EdgeInsets.all(11.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  buildText(
+                    'Ebl titanium account',
+                    TextStyle(color: Colors.white, fontSize: widthSize * 0.03),
+                  ),
+                  buildText(
+                      this.fullName,
                       TextStyle(
-                          fontSize: widthSize * 0.08, color: Colors.white),
-                    ),
-                    buildText(
-                      'Total Balance',
-                      TextStyle(
-                          color: Colors.white, fontSize: widthSize * 0.03),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                buildText(
-                  'Added card:05',
-                  TextStyle(color: Colors.white, fontSize: widthSize * 0.03),
-                ),
-                buildText(
-                  'Ac. no. 2234521',
-                  TextStyle(color: Colors.white, fontSize: widthSize * 0.03),
-                ),
-              ],
-            ),
-          ],
+                          color: Colors.white, fontSize: widthSize * 0.03)),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                      buildText(
+                        '\$6,190.00',
+                        TextStyle(
+                            fontSize: widthSize * 0.08, color: Colors.white),
+                      ),
+                      buildText(
+                        'Total Balance',
+                        TextStyle(
+                            color: Colors.white, fontSize: widthSize * 0.03),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  buildText(
+                    'Added card:05',
+                    TextStyle(color: Colors.white, fontSize: widthSize * 0.03),
+                  ),
+                  buildText(
+                    'Ac. no. 2234521',
+                    TextStyle(color: Colors.white, fontSize: widthSize * 0.03),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
+        decoration: BoxDecoration(
+            color: const Color(0xff199EFF),
+            borderRadius: BorderRadius.all(Radius.circular(10))),
       ),
-      decoration: BoxDecoration(
-          color: const Color(0xff199EFF),
-          borderRadius: BorderRadius.all(Radius.circular(10))),
+      onTap: () {
+        print("go to account card");
+      },
     );
   }
 }

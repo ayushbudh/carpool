@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:carpool_app/signup_screen.dart';
-import 'package:carpool_app/signin_screen.dart';
+import 'package:carpool_app/screens/signup_screen.dart';
+import 'package:carpool_app/screens/signin_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   final String role;
@@ -32,7 +32,7 @@ class _AuthScreenState extends State<AuthScreen> {
             controller: controller,
             children: <Widget>[
               SignUpScreen(widget.role),
-              SignInScreen(),
+              SignInScreen(widget.role),
             ],
           ),
           Column(

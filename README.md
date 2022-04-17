@@ -12,6 +12,7 @@ Carpool app has two separate UIs: Driver and Rider. Drivers have the ability to 
 
 View on figma: https://www.figma.com/file/sYpzzz2ShWBI7K8lAojgAe/Car-Pooling?node-id=0%3A1
 
+
 ## Flow Chart
 
 <img width="789" alt="Screen Shot 2022-04-17 at 12 43 14 AM" src="https://user-images.githubusercontent.com/56787472/163700762-e9373ca2-0be1-4a39-a49e-a56313d6ca26.png">
