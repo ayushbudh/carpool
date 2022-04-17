@@ -48,7 +48,7 @@ Currently the app works on both Android and IOS platform but there is an polylin
   <summary><h2>Setup Instructions</h2></summary>
    <p>To setup the project follow the steps below:
     <ol>
-      <li> Clone the repository using <code>git clone -b mapscreen https://github.com/ayushbudh/carpool/ on the terminal/cmd.</code></li>
+      <li> Clone the repository using <code>git clone -b mapscreen https://github.com/ayushbudh/carpool/ </code> on the terminal/cmd.</li>
       <li> Use <code> cd carpool </code> command to get at the root directory of the app </li>
       <li> Get and set up your api key in the code
         <ul>
