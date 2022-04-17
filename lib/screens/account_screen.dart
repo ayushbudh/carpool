@@ -36,8 +36,8 @@ class AccountScreenState extends State<AccountScreen> {
         children: [
           Padding(
             padding: EdgeInsets.only(
-                left: widthSize * 0.04,
-                top: heightSize * 0.03,
+                left: widthSize * 0.08,
+                top: heightSize * 0.05,
                 bottom: heightSize * 0.03),
             child: Text(
               "Account",
@@ -48,7 +48,7 @@ class AccountScreenState extends State<AccountScreen> {
       ),
       Container(
           margin:
-              EdgeInsets.only(left: widthSize * 0.02, right: widthSize * 0.02),
+              EdgeInsets.only(left: widthSize * 0.06, right: widthSize * 0.05),
           height: heightSize * 0.30,
           child: ListView.separated(
             padding: const EdgeInsets.all(8),
@@ -65,7 +65,7 @@ class AccountScreenState extends State<AccountScreen> {
             },
             separatorBuilder: (BuildContext context, int index) =>
                 const Divider(),
-          ))
+          )),
     ]);
   }
 }

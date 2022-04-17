@@ -34,8 +34,21 @@ Widget MapDriveWidget(FirebaseService _auth, BuildContext context,
                               fontWeight: FontWeight.bold),
                         );
                       } else {
-                        return CircularProgressIndicator(
-                          color: Colors.black,
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              "Loading...",
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  color: Colors.white,
+                                  decoration: TextDecoration.none,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            CircularProgressIndicator(
+                              color: Colors.black,
+                            )
+                          ],
                         );
                       }
                     }),
@@ -73,16 +86,6 @@ Widget MapDriveWidget(FirebaseService _auth, BuildContext context,
                       );
                     }
                   },
-                ),
-                SizedBox(height: heightSize * 0.02),
-                Text(
-                  "0 Riders",
-                  style: TextStyle(
-                    fontSize: 22,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.none,
-                  ),
                 ),
                 SizedBox(height: heightSize * 0.02),
                 ElevatedButton(

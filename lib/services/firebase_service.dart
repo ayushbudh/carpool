@@ -141,9 +141,7 @@ class FirebaseService {
         .update({"isDriving": status});
   }
 
-  Future<String> newDriveRequest() async {
-    // created index for this using role and userId based on ascending order
-
+  Future<String> newDriveRequest(var directions) async {
     var docQuery = await _firestoredb
         .collection("users")
         .where("role", isEqualTo: 'driver')
@@ -151,11 +149,17 @@ class FirebaseService {
         .where("isDriving", isEqualTo: true)
         .get();
 
+    var data = await _firestoredb
+        .collection("users")
+        .doc(_auth.currentUser!.uid)
+        .get();
+
     CollectionReference riderRequestcollectionReference = await _firestoredb
         .collection("users")
         .doc(_auth.currentUser!.uid)
         .collection("requests");
 
+    // to handle rejeceted request test case
     if (docQuery.docs.isEmpty) {
       riderRequestcollectionReference
           .doc("DUNAVAILABLE")
@@ -173,6 +177,7 @@ class FirebaseService {
       }
     }
 
+    // to use this variables for storing document in both driver and rider requests collection
     DocumentReference documentReference = docQuery.docs[0].reference;
     String driverDocumentID = documentReference.id;
 
@@ -180,17 +185,25 @@ class FirebaseService {
         documentReference.collection("requests");
     String currentTime = DateTime.now().toString();
 
+    // error handling and storing request document in both rider's and driver's requests collection
     try {
       await driverRequestsCollection.doc(_auth.currentUser!.uid).set({
+        "riderId": _auth.currentUser!.uid,
+        "riderName": data["firstName"] + " " + data["lastName"],
         "timeStamp": currentTime,
         "status": "PENDING",
-        "riderId": _auth.currentUser!.uid
+        "distance": directions['distanceInMiles'],
+        "start_loc_lat": directions["start_location"]["lat"],
+        "start_loc_lng": directions["start_location"]["lng"]
       });
 
       riderRequestcollectionReference.doc(driverDocumentID).set({
+        "driverId": driverDocumentID,
         "timeStamp": currentTime,
         "status": "PENDING",
-        "driverId": driverDocumentID
+        "distance": directions['distanceInMiles'],
+        "start_loc_lat": directions["start_location"]["lat"],
+        "start_loc_lng": directions["start_location"]["lng"]
       });
 
       return "PENDING";
@@ -255,16 +268,29 @@ class FirebaseService {
       var v1 = uuid.v1();
       currentUserRole = role;
 
-      Map<String, String> todoList = {
-        "firstName": firstName,
-        "lastName": lastName,
-        "role": role,
-        "timestamp": timestamp,
-        "userId": userCredential.user?.uid ?? v1,
-      };
+      Map<String, dynamic> userObj;
+
+      if (role == 'driver') {
+        userObj = {
+          "firstName": firstName,
+          "lastName": lastName,
+          "role": role,
+          "timestamp": timestamp,
+          "userId": userCredential.user?.uid ?? v1,
+        };
+      } else {
+        userObj = {
+          "firstName": firstName,
+          "lastName": lastName,
+          "isDriving": false,
+          "role": role,
+          "timestamp": timestamp,
+          "userId": userCredential.user?.uid ?? v1,
+        };
+      }
 
       documentReference
-          .set(todoList)
+          .set(userObj)
           .whenComplete(() => print("Data stored successfully"));
 
       Navigator.of(context).pushReplacementNamed("/home");

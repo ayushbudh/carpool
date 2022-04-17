@@ -16,6 +16,7 @@ import 'package:carpool_app/screens/driver_screens/map_drive_widget.dart';
 import 'package:carpool_app/services/map_metrics_service.dart';
 import 'driver_screens/map_drive_widget.dart';
 import 'rider_screens/map_new_rider_create_request_widget.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 
 class MapScreen extends StatefulWidget {
   final String origin;
@@ -196,7 +197,18 @@ class MapScreenState extends State<MapScreen> {
 
   Widget decideWidget(String currentWidgetState, var directions,
       double widthSize, double heightSize) {
-    if (currentWidgetState == "ROUTESCREEN") {
+    if (currentWidgetState == "RIDESCEENLOADING") {
+      return Expanded(
+          child: Container(
+              height: heightSize * 0.20,
+              decoration: BoxDecoration(
+                  color: const Color(0xff199EFF),
+                  borderRadius: BorderRadius.all(Radius.circular(25))),
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                MapNewRiderCreateRequestWidget(context, heightSize, "CREATE")
+              ])));
+    } else if (currentWidgetState == "ROUTESCREEN") {
       return MapRouteScreen();
     } else if (currentWidgetState == "DRIVESCREEN") {
       // for drivers
@@ -215,17 +227,14 @@ class MapScreenState extends State<MapScreen> {
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           Widget child;
           if (snapshot.hasError) {
-            child = const Icon(
-              Icons.error_outline,
-              color: Colors.red,
-              size: 60,
-            );
+            child = MapNewRiderFailedRequestWidget(context, heightSize);
           } else if (snapshot.hasData) {
             if (snapshot.data?.docs.isEmpty ?? true) {
-              child = MapDriveWidget(_auth, context, directions, heightSize);
+              child =
+                  MapNewRiderCreateRequestWidget(context, heightSize, "CREATE");
             } else {
-              // child = Text('${snapshot.data!.docs.single.data()}');
               String status = snapshot.data?.docs.first.data()["status"];
+
               if (status == "CREATE" || status == "PENDING") {
                 // STATUS: CREATE OR PENDING
                 child =
@@ -247,6 +256,8 @@ class MapScreenState extends State<MapScreen> {
             child = Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
+                JumpingDotsProgressIndicator(
+                    fontSize: 50.0, color: Colors.white),
                 Text(
                   "Loading...",
                   style: TextStyle(
@@ -254,9 +265,6 @@ class MapScreenState extends State<MapScreen> {
                       color: Colors.white,
                       decoration: TextDecoration.none,
                       fontWeight: FontWeight.bold),
-                ),
-                CircularProgressIndicator(
-                  color: Colors.black,
                 )
               ],
             );
@@ -292,9 +300,20 @@ class MapScreenState extends State<MapScreen> {
             if (snapshot.data?.docs.isEmpty ?? true) {
               child = MapDriveWidget(_auth, context, directions, heightSize);
             } else {
-              // child = Text('${snapshot.data!.docs.single.data()}');
               String status = snapshot.data?.docs.first.data()["status"];
-              if (status == 'PENDING' || status == 'CREATE') {
+
+              double riderLatPoint =
+                  snapshot.data?.docs.first.data()["start_loc_lat"];
+              double riderLngPoint =
+                  snapshot.data?.docs.first.data()["start_loc_lng"];
+
+              double driveLatPoint = directions["start_location"]["lat"];
+              double driveLngPoint = directions["start_location"]["lng"];
+
+              // to only match those riders that are travelling for same origin and destination location as the driver
+              if ((status == 'PENDING' || status == 'CREATE') &&
+                  (riderLatPoint == driveLatPoint &&
+                      riderLngPoint == driveLngPoint)) {
                 child = MapNewRiderWidget(context, heightSize,
                     snapshot.data?.docs.first.data(), directions);
               } else if (status == 'ACCEPTED') {
@@ -426,9 +445,11 @@ class MapScreenState extends State<MapScreen> {
                       } else {
                         context
                             .read<MapScreenProvider>()
+                            .setCurrentWidgetState("RIDESCEENLOADING");
+                        await _auth.newDriveRequest(directions);
+                        context
+                            .read<MapScreenProvider>()
                             .setCurrentWidgetState("RIDESCEEN");
-
-                        await _auth.newDriveRequest();
                       }
                     },
                     child: _auth.getCurrentUserRole() == 'driver'

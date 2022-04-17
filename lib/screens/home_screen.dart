@@ -136,36 +136,7 @@ class HomeScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Icon(Icons.account_circle,
-                              size: heightSize * 0.065),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            buildText('Rebeka ratry',
-                                TextStyle(fontSize: widthSize * 0.04)),
-                            Padding(padding: const EdgeInsets.all(3)),
-                            buildText('22 Jan 2020',
-                                TextStyle(fontSize: widthSize * 0.04)),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        buildText('+\$1,190.00',
-                            TextStyle(fontSize: widthSize * 0.04)),
-                        Padding(padding: const EdgeInsets.all(3)),
-                        buildText(
-                            '03:25am', TextStyle(fontSize: widthSize * 0.04)),
-                      ],
-                    )
+                    Text('No Activity'),
                   ],
                 ),
               ],
