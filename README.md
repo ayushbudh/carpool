@@ -6,6 +6,10 @@ Carpool app is a cross platform app that can help to reduce carbon footprint by 
 
 Carpool app has two separate UIs: Driver and Rider. Drivers have the ability to start/cancel a ride and during there ongoing drive they can received incoming request from the riders for a ride. Drivers can either accept/reject the request based on the drivers will. Riders have the ability to find a new ride and wait till there request gets accepted/rejected.
 
+## Demo
+
+https://user-images.githubusercontent.com/56787472/163720695-d03c4ac4-16f4-4d76-a3ad-20f3924b8501.mov
+
 ## Prototype
 
 <img width="929" alt="Screen Shot 2022-04-14 at 12 38 23 AM" src="https://user-images.githubusercontent.com/56787472/163314649-e02c9d56-7374-4ca9-88d7-1da555951573.png">
@@ -53,10 +57,10 @@ Currently the app works on both Android and IOS platform but there is an polylin
       <li> Use <code> cd carpool </code> command to get at the root directory of the app </li>
       <li> Get and set up your api key in the code
         <ul>
-          <li>Replace API-Key with your own https://github.com/ayushbudh/carpool/blob/6806de822386993f3a4aacb7be852d6e692c7965/ios/Runner/AppDelegate.swift#L13 </li>
-        <li>Replace APIKEY with your own for IOS https://github.com/ayushbudh/carpool/blob/6806de822386993f3a4aacb7be852d6e692c7965/lib/services/location_services.dart#L6 </li>
-          <li>Replace API-Key with your own for Web https://github.com/ayushbudh/carpool/blob/6806de822386993f3a4aacb7be852d6e692c7965/web/index.html#L29</li>
-          <li>Replace API-Key with your own for Android https://github.com/ayushbudh/carpool/blob/6806de822386993f3a4aacb7be852d6e692c7965/android/app/src/main/AndroidManifest.xml#L11</li>
+          <li>Replace API-Key with your own https://github.com/ayushbudh/carpool/blob/55d26bc63aaec638522d7dcfba12d0f3ad66e33f/lib/services/location_services.dart#L6 </li>
+        <li>Replace APIKEY with your own for IOS https://github.com/ayushbudh/carpool/blob/55d26bc63aaec638522d7dcfba12d0f3ad66e33f/ios/Runner/AppDelegate.swift#L13  </li>
+          <li>Replace API-Key with your own for Web https://github.com/ayushbudh/carpool/blob/55d26bc63aaec638522d7dcfba12d0f3ad66e33f/web/index.html#L29</li>
+          <li>Replace API-Key with your own for Android https://github.com/ayushbudh/carpool/blob/55d26bc63aaec638522d7dcfba12d0f3ad66e33f/android/app/src/main/AndroidManifest.xml#L11</li>
 
    </p>
  </details>
